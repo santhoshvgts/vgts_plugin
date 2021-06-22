@@ -7,6 +7,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 import 'package:image_picker/image_picker.dart';
 import 'package:vgts_plugin/form/config/form_field_config.dart';
+import 'package:vgts_plugin/form/utils/form_field_controller.dart';
 
 import '../vgts_plugin.dart';
 
@@ -84,28 +85,6 @@ class _ImageFieldState extends State<ImageField> {
       ),
     );
   }
-}
-
-class ImageFieldController {
-
-  Key fieldKey;
-  FocusNode focusNode = new FocusNode();
-  String? value;
-  bool required;
-
-  ImageFieldController(this.fieldKey, { this.value, this.required = true });
-
-  setValue(String value){
-    this.value = value;
-  }
-
-  String? validator(String? value) {
-    if (required && value == null)
-      return "Required !";
-
-    return null;
-  }
-
 }
 
 class _PickImageOption extends StatelessWidget {

@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/config/form_field_config.dart';
 import 'package:vgts_plugin/form/field_input_decoration.dart';
+import 'package:vgts_plugin/form/utils/form_field_controller.dart';
 import 'package:vgts_plugin/vgts_plugin.dart';
 
 class DropdownField<T extends BaseObject> extends StatefulWidget {
@@ -179,32 +180,3 @@ class _DropdownFieldState<T extends BaseObject> extends State<DropdownField<T>> 
 
 }
 
-
-class DropdownFieldController<T extends BaseObject> {
-
-  Key fieldKey;
-  FocusNode focusNode = new FocusNode();
-  T? value;
-  List<T> list;
-  String keyId;
-  String valueId;
-  bool required;
-
-  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.list = const [], this.value, this.required = true });
-
-  String? validator(T? value) {
-    if (value == null && required)
-      return "Required !";
-
-    return null;
-  }
-
-  setValue(T? value) {
-    this.value = value;
-  }
-
-  setList(List<T> list) {
-    this.list = list;
-  }
-
-}

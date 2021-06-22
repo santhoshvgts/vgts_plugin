@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
 
@@ -202,5 +203,56 @@ class FormFieldController {
     this.maxLines = 1000,
     this.required = false
   });
+
+}
+
+class DropdownFieldController<T extends BaseObject> {
+
+  Key fieldKey;
+  FocusNode focusNode = new FocusNode();
+  T? value;
+  List<T> list;
+  String keyId;
+  String valueId;
+  bool required;
+
+  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.list = const [], this.value, this.required = true });
+
+  String? validator(T? value) {
+    if (value == null && required)
+      return "Required !";
+
+    return null;
+  }
+
+  setValue(T? value) {
+    this.value = value;
+  }
+
+  setList(List<T> list) {
+    this.list = list;
+  }
+
+}
+
+class ImageFieldController {
+
+  Key fieldKey;
+  FocusNode focusNode = new FocusNode();
+  String? value;
+  bool required;
+
+  ImageFieldController(this.fieldKey, { this.value, this.required = true });
+
+  setValue(String value){
+    this.value = value;
+  }
+
+  String? validator(String? value) {
+    if (required && value == null)
+      return "Required !";
+
+    return null;
+  }
 
 }
