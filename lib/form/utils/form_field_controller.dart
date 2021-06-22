@@ -211,12 +211,12 @@ class DropdownFieldController<T extends BaseObject> {
   Key fieldKey;
   FocusNode focusNode = new FocusNode();
   T? value;
-  List<T> list;
+  List<T> dataList;
   String keyId;
   String valueId;
   bool required;
 
-  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.list = const [], this.value, this.required = true });
+  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.dataList = const [], this.value, this.required = true });
 
   String? validator(T? value) {
     if (value == null && required)
@@ -229,8 +229,10 @@ class DropdownFieldController<T extends BaseObject> {
     this.value = value;
   }
 
-  setList(List<T> list) {
-    this.list = list;
+  List<T> get list => dataList;
+
+  set list(List<T> list) {
+    this.dataList = list;
   }
 
 }

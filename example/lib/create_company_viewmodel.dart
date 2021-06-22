@@ -32,13 +32,13 @@ class CreateCompanyViewModel extends BaseViewModel {
 
   CreateCompanyViewModel(){
 
-    currencyController.setList([
+    currencyController.list = [
       Currency(id: 1, name: "INR"),
       Currency(id: 2, name: "USD"),
       Currency(id: 3, name: "SBC"),
       Currency(id: 4, name: "ADS"),
       Currency(id: 5, name: "FGT"),
-    ]);
+    ];
 
   }
 
