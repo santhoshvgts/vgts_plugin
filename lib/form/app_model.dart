@@ -2,8 +2,8 @@
 
 class AppModel {
 
-  Function object;
+  Function modelDeserializer;
 
-  AppModel(this.object);
+  AppModel(this.modelDeserializer);
 
 }

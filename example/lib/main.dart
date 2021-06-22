@@ -11,9 +11,9 @@ import 'package:vgts_plugin_example/res/styles.dart';
 
 void main() {
 
-  VGTSPlugin().init(
-    editTextFieldConfig: AppStyle.editTextFieldConfig,
-    objectType: Models.object
+  VGTSPlugin.init(
+    formFieldConfig: AppStyle.editTextFieldConfig,
+    modelDeserializer: Models.object
   );
 
   runApp(MyApp());

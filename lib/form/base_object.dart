@@ -15,7 +15,7 @@ class BaseObject {
   }
 
   static Future<T> createFromMap<T extends BaseObject>(Map<String, dynamic> data) async {
-    return await _registeredObject.object<T>().fromMap(data);
+    return await _registeredObject.modelDeserializer<T>().fromMap(data);
   }
 
 }

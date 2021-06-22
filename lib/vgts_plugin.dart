@@ -11,13 +11,9 @@ GetIt locator = GetIt.instance;
 
 class VGTSPlugin {
 
-  init({ required FormFieldConfig editTextFieldConfig, required Function objectType}) {
-    locator.registerLazySingleton(() => editTextFieldConfig);
-    locator.registerLazySingleton(() => AppModel(objectType));
-  }
-
-  setupLocator(){
-
+  static init({ required FormFieldConfig formFieldConfig, required Function modelDeserializer}) {
+    locator.registerLazySingleton(() => formFieldConfig);
+    locator.registerLazySingleton(() => AppModel(modelDeserializer));
   }
 
 }
