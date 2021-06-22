@@ -4,7 +4,7 @@ import 'package:vgts_plugin/vgts_plugin.dart';
 
 class BaseObject {
 
-  static AppModel _registeredObject = locator<AppModel>();
+  static AppModel _registeredObject = getIt<AppModel>();
 
   toDatabaseMap() {
 

@@ -37,7 +37,7 @@ class DropdownField<T extends BaseObject> extends StatefulWidget {
 class _DropdownFieldState<T extends BaseObject> extends State<DropdownField<T>> {
 
   BorderRadius borderRadius = BorderRadius.circular(5);
-  FormFieldConfig _config = locator<FormFieldConfig>();
+  FormFieldConfig _config = getIt<FormFieldConfig>();
 
   List<DropdownMenuItem<T>> get dropdownMenuItemWidget {
     return widget.controller.list.map<DropdownMenuItem<T>>((T value) {

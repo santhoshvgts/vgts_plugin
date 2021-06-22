@@ -7,13 +7,13 @@ export 'form/dropdown_field.dart';
 export 'form/edit_text_field.dart';
 export 'form/vgts_form.dart';
 
-GetIt locator = GetIt.instance;
+GetIt getIt = GetIt.instance;
 
 class VGTSPlugin {
 
   static init({ required FormFieldConfig formFieldConfig, required Function modelDeserializer}) {
-    locator.registerLazySingleton(() => formFieldConfig);
-    locator.registerLazySingleton(() => AppModel(modelDeserializer));
+    getIt.registerLazySingleton(() => formFieldConfig);
+    getIt.registerLazySingleton(() => AppModel(modelDeserializer));
   }
 
 }

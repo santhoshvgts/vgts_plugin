@@ -12,7 +12,7 @@ class BoxFieldInputDecoration extends InputDecoration {
     //     : (focusNode.hasFocus
     //     ? TextStyle(color: AppColor.primary)
     //     : TextStyle(color: Colors.black54)),
-    fillColor: locator<FormFieldConfig>().fillColor,
+    fillColor: getIt<FormFieldConfig>().fillColor,
     filled: true,
     contentPadding: EdgeInsets.symmetric(vertical: 10, horizontal: 12),
     counterText: counterText,
@@ -22,7 +22,7 @@ class BoxFieldInputDecoration extends InputDecoration {
     disabledBorder: _outlineInputBorder,
     focusedBorder: _focusedInputBorder,
     errorBorder: _errorInputBorder,
-    errorStyle: locator<FormFieldConfig>().errorStyle.copyWith(color: Colors.red),
+    errorStyle: getIt<FormFieldConfig>().errorStyle.copyWith(color: Colors.red),
     prefix: prefix,
     prefixIcon: prefixIcon,
     suffixIconConstraints: BoxConstraints(minWidth: 15, maxHeight: 20),
@@ -38,7 +38,7 @@ InputBorder _outlineInputBorder = OutlineInputBorder(
 
 InputBorder _focusedInputBorder = OutlineInputBorder(
   borderRadius: BorderRadius.circular(6),
-  borderSide: BorderSide(color: locator<FormFieldConfig>().focusColor, width: 2),
+  borderSide: BorderSide(color: getIt<FormFieldConfig>().focusColor, width: 2),
 );
 
 InputBorder _errorInputBorder = OutlineInputBorder(

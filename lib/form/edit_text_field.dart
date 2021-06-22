@@ -85,7 +85,7 @@ class _EditTextFieldState extends State<EditTextField> {
                 child: Text(
                   widget.label,
                   textScaleFactor: 1,
-                  style: locator<FormFieldConfig>().labelStyle,
+                  style: getIt<FormFieldConfig>().labelStyle,
                 ),
               ),
 
@@ -163,7 +163,7 @@ class _EditTextFieldState extends State<EditTextField> {
       case FormInputDecorationType.Box:
         return BoxFieldInputDecoration(
           focusNode: widget.controller.focusNode,
-          prefix: widget.prefixText == null ? null : Text("${widget.prefixText} ", style: locator<FormFieldConfig>().textStyle,),
+          prefix: widget.prefixText == null ? null : Text("${widget.prefixText} ", style: getIt<FormFieldConfig>().textStyle,),
           prefixIcon: widget.prefixIcon == null ? null : widget.prefixIcon,
           suffixIcon: widget.isPasswordField ? _buildPasswordEyeIcon() : widget.suffixIcon != null ? widget.suffixIcon : null,
           counterText: widget.counterText != null ? widget.counterText : "",
@@ -173,7 +173,7 @@ class _EditTextFieldState extends State<EditTextField> {
       default:
         return BoxFieldInputDecoration(
           focusNode: widget.controller.focusNode,
-          prefix: widget.prefixText == null ? null : Text("${widget.prefixText} ", style: locator<FormFieldConfig>().textStyle,),
+          prefix: widget.prefixText == null ? null : Text("${widget.prefixText} ", style: getIt<FormFieldConfig>().textStyle,),
           prefixIcon: widget.prefixIcon == null ? null : widget.prefixIcon,
           suffixIcon: widget.isPasswordField ? _buildPasswordEyeIcon() : widget.suffixIcon != null ? widget.suffixIcon : null,
           counterText: widget.counterText != null ? widget.counterText : "",

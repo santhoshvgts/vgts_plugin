@@ -24,7 +24,7 @@ class ImageField extends StatefulWidget {
 class _ImageFieldState extends State<ImageField> {
 
   final ImagePicker _picker = ImagePicker();
-  final FormFieldConfig _config = locator<FormFieldConfig>();
+  final FormFieldConfig _config = getIt<FormFieldConfig>();
 
   @override
   Widget build(BuildContext context) {
@@ -110,7 +110,7 @@ class ImageFieldController {
 
 class _PickImageOption extends StatelessWidget {
 
-  final FormFieldConfig _config = locator<FormFieldConfig>();
+  final FormFieldConfig _config = getIt<FormFieldConfig>();
 
   @override
   Widget build(BuildContext context) {
