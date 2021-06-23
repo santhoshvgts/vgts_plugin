@@ -119,7 +119,7 @@ class _EditTextFieldState extends State<EditTextField> {
                 maxLength: widget.controller.maxLength,
                 autovalidateMode: AutovalidateMode.disabled,
 
-                maxLines: widget.controller.maxLines,
+                maxLines: widget.isPasswordField ? 1 : widget.controller.maxLines,
                 minLines: widget.controller.minLines,
 
                 inputFormatters: widget.isPasswordField || widget.controller.textInputType == TextInputType.emailAddress ? [
