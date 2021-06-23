@@ -76,7 +76,11 @@ class AppStyle {
       optionalStyle: AppTextStyle.captionRegular,
       fillColor: AppColor.secondaryBackground,
       focusColor: AppColor.primary,
-      type: FormInputDecorationType.Box
+      errorColor: Colors.red,
+      type: FormInputDecorationType.Box,
+      formInputLabelUIType: FormInputLabelUIType.Style1,
+      borderColor: AppColor.secondaryBackground,
+      borderRadius: BorderRadius.circular(10)
   );
 }
 

@@ -17,6 +17,7 @@ class EditTextField extends StatefulWidget {
 
   TextInputAction textInputAction;
 
+  String? placeholder;
   Widget? prefixIcon;
   Widget? suffixIcon;
 
@@ -39,6 +40,7 @@ class EditTextField extends StatefulWidget {
         this.autoFocus = false,
         this.enabled = true,
         this.prefixText,
+        this.placeholder,
         this.prefixIcon,
         this.textAlign = TextAlign.left,
         this.textStyle,
@@ -55,6 +57,7 @@ class EditTextField extends StatefulWidget {
           this.enabled = true,
           this.autoFocus = false,
           this.prefixText,
+          this.placeholder,
           this.prefixIcon,
           this.textAlign = TextAlign.left,
           this.textInputAction = TextInputAction.next,
@@ -68,6 +71,8 @@ class EditTextField extends StatefulWidget {
 
 class _EditTextFieldState extends State<EditTextField> {
 
+  FormFieldConfig _config = getIt<FormFieldConfig>();
+
   bool isVisible = false;
 
   @override
@@ -76,72 +81,57 @@ class _EditTextFieldState extends State<EditTextField> {
     return new Container(
       margin: widget.margin,
       child: Column(
-        crossAxisAlignment: CrossAxisAlignment.start,
-        children: <Widget>[
+          crossAxisAlignment: CrossAxisAlignment.start,
+          children: <Widget>[
 
-          Row(
-            children: [
-              Expanded(
-                child: Text(
-                  widget.label,
-                  textScaleFactor: 1,
-                  style: getIt<FormFieldConfig>().labelStyle,
-                ),
-              ),
+            LabelUI(
+                label: widget.label,
+                required: widget.controller.required,
+            ),
 
-              //Todo need to add optional indication
-              if (!widget.controller.required)
-                Text(
-                  "Optional",
-                  textScaleFactor: 1,
-                  style: TextStyle(color: Colors.black38, fontSize: 12,),
-                ),
+            Padding(
+              padding: EdgeInsets.only(top: 10),
+            ),
 
-            ],
-          ),
+            TextFormField(
+                key: widget.controller.fieldKey,
+                controller: widget.controller.textEditingController,
+                enableInteractiveSelection: true,
+                obscureText: widget.isPasswordField && !isVisible ? true : false,
+                textInputAction: widget.textInputAction,
+                textAlign: widget.textAlign,
+                style: widget.textStyle,
+                focusNode: widget.controller.focusNode,
+                autofocus: widget.autoFocus,
+                onChanged: (value) {
+                  if (widget.onChanged != null) {
+                    widget.onChanged!(value);
+                  }
+                },
+                onFieldSubmitted: (value) {
+                  if (widget.onSubmitted != null) {
+                    widget.onSubmitted!(value);
+                  }
+                },
+                validator: widget.controller.validator,
+                enabled: widget.enabled,
 
-          Padding(
-            padding: EdgeInsets.only(top: 10),
-          ),
+                maxLength: widget.controller.maxLength,
+                autovalidateMode: AutovalidateMode.disabled,
 
-          TextFormField(
-            key: widget.controller.fieldKey,
-            controller: widget.controller.textEditingController,
-            enableInteractiveSelection: true,
-            obscureText: widget.isPasswordField && !isVisible ? true : false,
-            textInputAction: widget.textInputAction,
-            textAlign: widget.textAlign,
-            style: widget.textStyle,
-            focusNode: widget.controller.focusNode,
-            autofocus: widget.autoFocus,
-            onChanged: (value){
-              if (widget.onChanged != null) {
-                widget.onChanged!(value);
-              }
-            },
-            onFieldSubmitted: (value) {
-              if (widget.onSubmitted != null) {
-                widget.onSubmitted!(value);
-              }
-            },
-            validator: widget.controller.validator,
-            enabled: widget.enabled,
+                maxLines: widget.controller.maxLines,
+                minLines: widget.controller.minLines,
 
-            maxLength: widget.controller.maxLength,
-            autovalidateMode: AutovalidateMode.disabled,
+                inputFormatters: widget.isPasswordField || widget.controller.textInputType == TextInputType.emailAddress ? [
+                  FilteringTextInputFormatter.deny(new RegExp('[\\ ]')),
+                ] : widget.controller.inputFormatter,
 
-            maxLines: widget.controller.maxLines,
-            minLines: widget.controller.minLines,
+                decoration: inputDecoration,
+                keyboardType: widget.controller.textInputType,
+                textCapitalization: widget.controller.textCapitalization
+            ),
 
-            inputFormatters: widget.isPasswordField || widget.controller.textInputType == TextInputType.emailAddress ? [
-              FilteringTextInputFormatter.deny(new RegExp('[\\ ]')),
-            ] : widget.controller.inputFormatter,
-
-            decoration: inputDecoration,
-            keyboardType: widget.controller.textInputType,
-            textCapitalization: widget.controller.textCapitalization
-          )
-        ]
+          ]
       ),
     );
   }
@@ -157,9 +147,7 @@ class _EditTextFieldState extends State<EditTextField> {
   }
 
   InputDecoration get inputDecoration {
-    FormInputDecorationType type = FormInputDecorationType.Box;
-
-    switch(type) {
+    switch(_config.type) {
       case FormInputDecorationType.Box:
         return BoxFieldInputDecoration(
           focusNode: widget.controller.focusNode,
@@ -167,6 +155,7 @@ class _EditTextFieldState extends State<EditTextField> {
           prefixIcon: widget.prefixIcon == null ? null : widget.prefixIcon,
           suffixIcon: widget.isPasswordField ? _buildPasswordEyeIcon() : widget.suffixIcon != null ? widget.suffixIcon : null,
           counterText: widget.counterText != null ? widget.counterText : "",
+          placeholder: widget.placeholder
         );
 
       case FormInputDecorationType.Box:
@@ -177,15 +166,70 @@ class _EditTextFieldState extends State<EditTextField> {
           prefixIcon: widget.prefixIcon == null ? null : widget.prefixIcon,
           suffixIcon: widget.isPasswordField ? _buildPasswordEyeIcon() : widget.suffixIcon != null ? widget.suffixIcon : null,
           counterText: widget.counterText != null ? widget.counterText : "",
+          placeholder: widget.placeholder
         );
     }
   }
 
 }
 
-class AlwaysDisabledFocusNode extends FocusNode {
+class LabelUI extends StatelessWidget {
+
+  String label;
+  bool required;
+
+  FormFieldConfig _config = getIt<FormFieldConfig>();
+
+  LabelUI({ required this.label, required this.required });
+
   @override
-  bool get hasFocus => false;
+  Widget build(BuildContext context) {
+
+    switch(_config.formInputLabelUIType) {
+
+      case FormInputLabelUIType.Style1:
+        return Row(
+          children: [
+
+            if (required)
+              Text("* ",
+                textScaleFactor: 1,
+                style: getIt<FormFieldConfig>().labelStyle.copyWith(color: getIt<FormFieldConfig>().errorColor),
+              ),
+
+            Expanded(
+              child: Text(
+                label,
+                textScaleFactor: 1,
+                style: getIt<FormFieldConfig>().labelStyle,
+              ),
+            ),
+
+          ],
+        );
+
+      case FormInputLabelUIType.Default:
+      default:
+        return Row(
+          children: [
+            Expanded(
+              child: Text(
+                label,
+                textScaleFactor: 1,
+                style: getIt<FormFieldConfig>().labelStyle,
+              ),
+            ),
+
+            if (!required)
+              Text(
+                "Optional",
+                textScaleFactor: 1,
+                style: TextStyle(color: Colors.black38, fontSize: 12,),
+              ),
+
+          ],
+        );
+    }
+  }
+
 }
-
-

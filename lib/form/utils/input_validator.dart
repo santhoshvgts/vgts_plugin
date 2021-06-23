@@ -35,7 +35,7 @@ class InputValidator {
 
   static String? emailValidator(String? value) {
     if (!RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(value!)) {
-      return "Invalid Email Address";
+      return "Please enter a valid Email";
     }
 
     return null;

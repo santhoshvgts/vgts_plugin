@@ -61,7 +61,7 @@ class _ImageFieldState extends State<ImageField> {
                 child: Container(
                   decoration: BoxDecoration(
                     borderRadius: BorderRadius.circular(12),
-                    border: Border.all(color: state.hasError ? Colors.red : _config.fillColor, width: 2)
+                    border: Border.all(color: state.hasError ? getIt<FormFieldConfig>().errorColor : _config.fillColor, width: 2)
                   ),
                   height: 104,
                   width: 104,
@@ -75,7 +75,7 @@ class _ImageFieldState extends State<ImageField> {
               if (state.hasError)
                 Padding(
                   padding: EdgeInsets.only(top: 5),
-                  child: Text(state.errorText!, textScaleFactor: 1, style: _config.errorStyle.copyWith(color: Colors.red),)
+                  child: Text(state.errorText!, textScaleFactor: 1, style: _config.errorStyle.copyWith(color: getIt<FormFieldConfig>().errorColor),)
                 )
             ],
           );

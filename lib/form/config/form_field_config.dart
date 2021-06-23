@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 
 enum FormInputDecorationType { Box, Line }
+enum FormInputLabelUIType { Default, Style1 }
 
 class FormFieldConfig {
 
@@ -11,7 +12,11 @@ class FormFieldConfig {
   TextStyle errorStyle;
   Color focusColor;
   Color fillColor;
+  Color borderColor;
+  Color errorColor;
+  BorderRadius borderRadius;
   FormInputDecorationType type;
+  FormInputLabelUIType formInputLabelUIType;
 
   FormFieldConfig({
       required this.textStyle,
@@ -20,7 +25,11 @@ class FormFieldConfig {
       required this.optionalStyle,
       required this.fillColor,
       required this.focusColor,
-      required this.type
+      required this.type,
+      this.borderColor = Colors.black12,
+      this.errorColor = Colors.red,
+      this.borderRadius = const BorderRadius.all(Radius.circular(10)),
+      this.formInputLabelUIType = FormInputLabelUIType.Default
   });
 
 }

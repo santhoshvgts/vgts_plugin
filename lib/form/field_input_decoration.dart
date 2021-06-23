@@ -6,7 +6,7 @@ import 'package:vgts_plugin/vgts_plugin.dart';
 
 class BoxFieldInputDecoration extends InputDecoration {
 
-  BoxFieldInputDecoration({ FocusNode? focusNode, Widget? prefix, Widget? prefixIcon, Widget? suffixIcon, String? counterText}) : super(
+  BoxFieldInputDecoration({ FocusNode? focusNode, Widget? prefix, Widget? prefixIcon, Widget? suffixIcon, String? counterText, String? placeholder}) : super(
     // labelStyle: focusNode == null
     //     ? new TextStyle(color: Colors.black54)
     //     : (focusNode.hasFocus
@@ -22,8 +22,12 @@ class BoxFieldInputDecoration extends InputDecoration {
     disabledBorder: _outlineInputBorder,
     focusedBorder: _focusedInputBorder,
     errorBorder: _errorInputBorder,
-    errorStyle: getIt<FormFieldConfig>().errorStyle.copyWith(color: Colors.red),
+    errorStyle: getIt<FormFieldConfig>().errorStyle.copyWith(color: getIt<FormFieldConfig>().errorColor),
     prefix: prefix,
+
+    hintText: placeholder,
+    hintStyle: getIt<FormFieldConfig>().textStyle.copyWith(color: getIt<FormFieldConfig>().textStyle.color!.withOpacity(0.3)),
+
     prefixIcon: prefixIcon,
     suffixIconConstraints: BoxConstraints(minWidth: 15, maxHeight: 20),
     suffixIcon: suffixIcon,
@@ -32,16 +36,16 @@ class BoxFieldInputDecoration extends InputDecoration {
 }
 
 InputBorder _outlineInputBorder = OutlineInputBorder(
-  borderRadius: BorderRadius.circular(6),
-  borderSide: BorderSide(color: Colors.black38),
+  borderRadius: getIt<FormFieldConfig>().borderRadius,
+  borderSide: BorderSide(color: getIt<FormFieldConfig>().borderColor),
 );
 
 InputBorder _focusedInputBorder = OutlineInputBorder(
-  borderRadius: BorderRadius.circular(6),
+  borderRadius: getIt<FormFieldConfig>().borderRadius,
   borderSide: BorderSide(color: getIt<FormFieldConfig>().focusColor, width: 2),
 );
 
 InputBorder _errorInputBorder = OutlineInputBorder(
-  borderRadius: BorderRadius.circular(6),
-  borderSide: BorderSide(color: Colors.red, width: 2),
+  borderRadius: getIt<FormFieldConfig>().borderRadius,
+  borderSide: BorderSide(color: getIt<FormFieldConfig>().errorColor, width: 2),
 );

@@ -26,90 +26,94 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
       ),
       body: VGTSForm(
         key: viewModel.basicInfoFormKey,
-        child: Column(
-          children: [
-            Flexible(
-              child: Container(
-                height: double.infinity,
-                child: SingleChildScrollView(
-                  padding: EdgeInsets.all(16.0),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
+        child: Container(
+          color: AppColor.white,
+          child: Column(
+            children: [
+              Flexible(
+                child: Container(
+                  height: double.infinity,
+                  child: SingleChildScrollView(
+                    padding: EdgeInsets.all(16.0),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
 
-                      ImageField(
-                        viewModel.itemImageController,
-                        margin: EdgeInsets.only(top: 20),
-                      ),
+                        ImageField(
+                          viewModel.itemImageController,
+                          margin: EdgeInsets.only(top: 20),
+                        ),
 
-                      EditTextField(
-                        "Company Name",
-                        viewModel.companyNameController,
-                        //  margin: EdgeInsets.only(top: 15.0),
-                        onChanged: (value) {},
-                        onSubmitted: (val) {
+                        EditTextField(
+                          "Company Name",
+                          viewModel.companyNameController,
+                          placeholder: "Enter Company Name",
+                          //  margin: EdgeInsets.only(top: 15.0),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
 
-                        },
-                      ),
+                          },
+                        ),
 
-                      EditTextField(
-                        "Phone no",
-                        viewModel.phoneController,
-                        margin: EdgeInsets.only(top: 15),
-                        onChanged: (value) {},
-                        onSubmitted: (val) {
-                          print("phone on Submitted");
-                          viewModel.emailController.focusNode.requestFocus();
-                        },
-                      ),
+                        EditTextField(
+                          "Phone no",
+                          viewModel.phoneController,
+                          margin: EdgeInsets.only(top: 15),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
+                            print("phone on Submitted");
+                            viewModel.emailController.focusNode.requestFocus();
+                          },
+                        ),
 
-                      EditTextField(
-                        "Email Id",
-                        viewModel.emailController,
-                        margin: EdgeInsets.only(top: 15),
-                        onChanged: (value) {},
-                        onSubmitted: (val) {
-                          viewModel.websiteController.focusNode.requestFocus();
-                        },
-                      ),
+                        EditTextField(
+                          "Email Id",
+                          viewModel.emailController,
+                          margin: EdgeInsets.only(top: 15),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
+                            viewModel.websiteController.focusNode.requestFocus();
+                          },
+                        ),
 
-                      EditTextField(
-                        "Website Link",
-                        viewModel.websiteController,
-                        margin: EdgeInsets.only(top: 15, bottom: 15.0),
-                        onChanged: (value) {},
-                        onSubmitted: (val) {
+                        EditTextField(
+                          "Website Link",
+                          viewModel.websiteController,
+                          margin: EdgeInsets.only(top: 15, bottom: 15.0),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
 
-                        },
-                      ),
+                          },
+                        ),
 
-                      DropdownField<Currency>.withAdd(
-                        "Currency Type",
-                        viewModel.currencyController,
-                        placeholder: "",
-                        margin: EdgeInsets.only(top: 15),
-                        onChange: (value) {
+                        DropdownField<Currency>.withAdd(
+                          "Currency Type",
+                          viewModel.currencyController,
+                          placeholder: "Select Currency Type",
+                          margin: EdgeInsets.only(top: 15),
+                          onChange: (value) {
 
-                        },
-                      ),
+                          },
+                        ),
 
 
-                    ],
+                      ],
+                    ),
                   ),
                 ),
               ),
-            ),
 
-            MaterialButton(
-              onPressed: (){
-                if (viewModel.basicInfoFormKey.currentState!.validate()) {
+              MaterialButton(
+                onPressed: (){
+                  if (viewModel.basicInfoFormKey.currentState!.validate()) {
 
-                }
-              } ,
-              child: Text("Submit"),
-            )
+                  }
+                } ,
+                child: Text("Submit"),
+              )
 
-          ],
+            ],
+          ),
         ),
       ),
     );

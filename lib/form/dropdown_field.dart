@@ -76,7 +76,7 @@ class _DropdownFieldState<T extends BaseObject> extends State<DropdownField<T>> 
         crossAxisAlignment: CrossAxisAlignment.start,
         children: [
 
-          Text(widget.title, textScaleFactor: 1, style: _config.labelStyle),
+          LabelUI(label: widget.title, required: widget.controller.required),
 
           Padding(padding: EdgeInsets.only(top: 10),),
 
@@ -86,7 +86,7 @@ class _DropdownFieldState<T extends BaseObject> extends State<DropdownField<T>> 
             icon: const Icon(Icons.keyboard_arrow_down),
             iconSize: 30,
             elevation: 16,
-            hint: Text(widget.placeholder, textScaleFactor: 1,),
+            hint: Text(widget.placeholder, textScaleFactor: 1, style: getIt<FormFieldConfig>().textStyle.copyWith(color: getIt<FormFieldConfig>().textStyle.color!.withOpacity(0.3)),),
             style: _config.textStyle,
             isExpanded: true,
             focusNode: widget.controller.focusNode,
