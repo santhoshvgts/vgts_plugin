@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/config/form_field_config.dart';
+import 'package:vgts_plugin/form/edit_text_field.dart';
 import 'package:vgts_plugin/form/field_input_decoration.dart';
 import 'package:vgts_plugin/form/utils/form_field_controller.dart';
 import 'package:vgts_plugin/vgts_plugin.dart';
