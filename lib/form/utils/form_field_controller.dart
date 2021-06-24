@@ -49,7 +49,7 @@ class EmailFormFieldController extends FormFieldController {
   EmailFormFieldController(Key fieldKey,  { bool required = true }) : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : InputValidator.emailValidator;
+  String? Function(String? p1)? get validator => InputValidator.emailValidator;
 
   @override
   TextInputType get textInputType => TextInputType.emailAddress;
