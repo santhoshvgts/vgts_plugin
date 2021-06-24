@@ -10,6 +10,8 @@ class InputValidator {
   }
 
   static String? nameValidator(String? value) {
+    if (value == null) return "Required";
+
     if (value!.isEmpty)
       return "Required !";
 
