@@ -16,7 +16,7 @@ class InputValidator {
     if (value!.isEmpty)
       return "Required !";
 
-    if (value!.length < 3)
+    if (value.trim()!.length < 3)
       return "Name should be more than 3 letters";
 
     return null;
