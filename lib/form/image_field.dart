@@ -67,7 +67,10 @@ class _ImageFieldState extends State<ImageField> {
                   width: 104,
                   child: ClipRRect(
                     borderRadius: BorderRadius.circular(12.0),
-                    child: widget.controller.value == null ? Image.asset("assets/image_place_holder.png", package: "vgts_plugin",) : Image.memory(base64Decode(widget.controller.value!), width:104, height:104, fit: BoxFit.cover,),
+                    child: widget.controller.value == null ?
+                    Image.asset("assets/image_place_holder.png", package: "vgts_plugin",) :
+                    _ImageView(widget.controller.value!)
+
                   ),
                 ),
               ),
@@ -85,6 +88,23 @@ class _ImageFieldState extends State<ImageField> {
       ),
     );
   }
+
+}
+
+class _ImageView extends StatelessWidget {
+
+  final String image;
+
+  _ImageView(this.image);
+
+  @override
+  Widget build(BuildContext context) {
+    return Image.memory(base64Decode(image),
+      width:104, height:104, fit: BoxFit.cover,
+    );
+  }
+
+
 }
 
 class _PickImageOption extends StatelessWidget {

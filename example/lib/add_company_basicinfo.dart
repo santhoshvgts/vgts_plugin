@@ -78,6 +78,17 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
                         ),
 
                         EditTextField(
+                          "Zip Code",
+                          viewModel.zipCodeController,
+                          margin: EdgeInsets.only(top: 15),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
+                            viewModel.websiteController.focusNode.requestFocus();
+                          },
+                        ),
+
+
+                        EditTextField(
                           "Website Link",
                           viewModel.websiteController,
                           margin: EdgeInsets.only(top: 15, bottom: 15.0),

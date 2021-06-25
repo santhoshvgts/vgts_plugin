@@ -127,6 +127,9 @@ class NumberFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
+  List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
+
+  @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 
 }

@@ -20,7 +20,7 @@ class CreateCompanyViewModel extends BaseViewModel {
 
   TextFormFieldController address1Controller = TextFormFieldController(ValueKey("txtAddress1"),required: true);
   TextFormFieldController address2Controller = TextFormFieldController(ValueKey("txtAddress2"),required: true);
-  TextFormFieldController zipCodeController = TextFormFieldController(ValueKey("txtZipCode"),inputType: TextInputType.number,required: true);
+  NumberFormFieldController zipCodeController = NumberFormFieldController(ValueKey("txtZipCode"), required: true);
 
   TextFormFieldController gstNoController = TextFormFieldController(ValueKey("txtGstNo"),textCapital: TextCapitalization.characters,required: true);
   TextFormFieldController percentController = TextFormFieldController(ValueKey("txtPercent"),required: true);
