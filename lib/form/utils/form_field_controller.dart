@@ -26,7 +26,7 @@ class PhoneFormFieldController extends FormFieldController {
   String? Function(String? p1)? get validator => !this.required ? null : InputValidator.phoneValidator;
 
   @override
-  TextInputType get textInputType => TextInputType.phone;
+  TextInputType get textInputType => TextInputType.number;
 
   @override
   set maxLength(int _maxLength) {
