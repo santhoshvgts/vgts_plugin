@@ -46,6 +46,17 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
                         ),
 
                         EditTextField(
+                          "Adhaar Number",
+                          viewModel.adhaarNumberController,
+                          placeholder: "Enter Adhar Number",
+                          //  margin: EdgeInsets.only(top: 15.0),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
+
+                          },
+                        ),
+
+                        EditTextField(
                           "Company Name",
                           viewModel.companyNameController,
                           placeholder: "Enter Company Name",

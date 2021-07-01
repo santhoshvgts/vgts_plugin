@@ -44,4 +44,12 @@ class InputValidator {
     return null;
   }
 
+  static String? adhaarValidator(String? value) {
+    if (!RegExp(r"[0-9]{4}[\\ ][0-9]{4}[\\ ][0-9]{4}$").hasMatch(value!)) {
+      return "Please enter a valid Adhaar Number";
+    }
+
+    return null;
+  }
+
 }
