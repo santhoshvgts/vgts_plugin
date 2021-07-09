@@ -17,9 +17,11 @@ class CreateCompanyViewModel extends BaseViewModel {
   FormFieldController adhaarNumberController = FormFieldController(
       ValueKey("txtCompanyName"),
     inputFormatter: InputFormatter.adhaarNoFormatter,
-    validator: InputValidator.adhaarValidator
+    validator: (p1) {
+      return InputValidator.adhaarValidator(p1, requiredText: "Required Aasdasd");
+    }
   );
-  NameFormFieldController companyNameController = NameFormFieldController(ValueKey("txtCompanyName"));
+  NameFormFieldController companyNameController = NameFormFieldController(ValueKey("txtCompanyName"), requiredText: "Please Enter Company Name");
   NameFormFieldController fullNameController = NameFormFieldController(ValueKey("txtFullName"));
   PhoneFormFieldController phoneController = PhoneFormFieldController(ValueKey("txtPhone"));
   EmailFormFieldController emailController = EmailFormFieldController(ValueKey("txtEmail"), required: false);

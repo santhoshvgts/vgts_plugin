@@ -17,13 +17,15 @@ import 'package:vgts_plugin/form/utils/input_validator.dart';
 //
 class PhoneFormFieldController extends FormFieldController {
 
-  PhoneFormFieldController(Key fieldKey, { int maxLength = 10, bool required = true }) : super(fieldKey, maxLength: maxLength, required: required);
+  String? requiredText;
+
+  PhoneFormFieldController(Key fieldKey, { int maxLength = 10, bool required = true, this.requiredText }) : super(fieldKey, maxLength: maxLength, required: required);
 
   @override
   List<TextInputFormatter> get inputFormatter => InputFormatter.phoneNoFormatter;
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : InputValidator.phoneValidator;
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.phoneValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.number;
@@ -46,10 +48,12 @@ class PhoneFormFieldController extends FormFieldController {
 //
 class EmailFormFieldController extends FormFieldController {
 
-  EmailFormFieldController(Key fieldKey,  { bool required = true }) : super(fieldKey, required: required);
+  String? requiredText;
+
+  EmailFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => InputValidator.emailValidator;
+  String? Function(String? p1)? get validator => (String? p1) => InputValidator.emailValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.emailAddress;
@@ -91,10 +95,12 @@ class MultiLineFormFieldController extends FormFieldController {
 //
 class NameFormFieldController extends FormFieldController {
 
-  NameFormFieldController(Key fieldKey,  { bool required = true }) : super(fieldKey, required: required);
+  String? requiredText;
+
+  NameFormFieldController(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : InputValidator.nameValidator;
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.nameValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.name;
@@ -118,10 +124,12 @@ class NameFormFieldController extends FormFieldController {
 //
 class NumberFormFieldController extends FormFieldController {
 
-  NumberFormFieldController(Key fieldKey,  { bool required = false }) : super(fieldKey, required: required);
+  String? requiredText;
+
+  NumberFormFieldController(Key fieldKey,  { bool required = false, this.requiredText }) : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : InputValidator.numberValidator;
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
@@ -145,14 +153,16 @@ class NumberFormFieldController extends FormFieldController {
 //
 class TextFormFieldController extends FormFieldController {
 
+  String? requiredText;
+
   TextInputType? inputType;
 
   TextCapitalization? textCapital;
 
-  TextFormFieldController(Key fieldKey,  { bool required = false, this.inputType, this.textCapital }) : super(fieldKey, required: required);
+  TextFormFieldController(Key fieldKey,  { bool required = false, this.inputType, this.textCapital, this.requiredText }) : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : super.validator;
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => this.inputType??  TextInputType.text;
@@ -171,7 +181,7 @@ class FormFieldController {
 
   TextCapitalization textCapitalization = TextCapitalization.none;
 
-  String? Function(String?)? validator = InputValidator.emptyValidator;
+  String? Function(String?)? validator = (String? p1) => InputValidator.emptyValidator(p1,);
   List<TextInputFormatter> inputFormatter = InputFormatter.defaultFormatter;
 
   TextInputType textInputType;
@@ -199,7 +209,7 @@ class FormFieldController {
   FormFieldController(this.fieldKey, {
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
-    this.validator = InputValidator.emptyValidator,
+    this.validator,
     this.inputFormatter = const [],
     this.maxLength = 1000,
     this.minLines = 1,

@@ -2,41 +2,44 @@
 
 class InputValidator {
 
-  static String? emptyValidator(String? value) {
-    if (value!.isEmpty)
-      return "Required !";
+  static String? emptyValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
 
     return null;
   }
 
-  static String? nameValidator(String? value) {
-    if (value == null)
-      return "Required";
+  static String? nameValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
 
-    if (value!.isEmpty)
-      return "Required !";
-
-    if (value.trim()!.length < 3)
+    if (value!.trim()!.length < 3)
       return "Name should be more than 3 letters";
 
     return null;
   }
 
-  static String? numberValidator(String? value) {
-    if (value!.isEmpty)
-      return "Required !";
+  static String? numberValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
 
     return null;
   }
 
-  static String? phoneValidator(String? value) {
+  static String? phoneValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
+
     if (value!.length < 10)
       return "Invalid Phone Number";
 
     return null;
   }
 
-  static String? emailValidator(String? value) {
+  static String? emailValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
+
     if (!RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(value!)) {
       return "Please enter a valid Email";
     }
@@ -44,7 +47,10 @@ class InputValidator {
     return null;
   }
 
-  static String? adhaarValidator(String? value) {
+  static String? adhaarValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
+
     if (!RegExp(r"[0-9]{4}[\\ ][0-9]{4}[\\ ][0-9]{4}$").hasMatch(value!)) {
       return "Please enter a valid Adhaar Number";
     }
