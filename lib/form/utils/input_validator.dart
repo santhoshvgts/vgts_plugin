@@ -58,4 +58,15 @@ class InputValidator {
     return null;
   }
 
+  static String? panNumberValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
+
+    if (!RegExp(r"[A-Z]{5}[0-9]{4}[A-Z]{1}").hasMatch(value!)) {
+      return "Please enter a valid PAN Number";
+    }
+
+    return null;
+  }
+
 }
