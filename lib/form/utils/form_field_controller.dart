@@ -229,7 +229,7 @@ class DropdownFieldController<T extends BaseObject> {
   String valueId;
   bool required;
 
-  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.dataList = const [], this.value, this.required = true });
+  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.dataList = const [], this.required = true });
 
   String? validator(T? value) {
     if (value == null && required)
@@ -245,6 +245,7 @@ class DropdownFieldController<T extends BaseObject> {
   List<T> get list => dataList;
 
   set list(List<T> list) {
+    this.value = null;
     this.dataList = list;
   }
 
