@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/utils/form_field_controller.dart';
 import 'package:vgts_plugin_example/res/colors.dart';
 import 'package:vgts_plugin_example/res/fontsize.dart';
@@ -11,21 +12,21 @@ Color _errorColor = Color(0xffEB1414);
 TextStyle _errorTextStyle = TextStyle(fontSize: AppFontSize.dp12, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: 0.5, color: _errorColor);
 TextStyle _labelTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, height: 20 / 14, letterSpacing: 0.5, color: AppColor.text);
 TextStyle _bodyTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 24 / 16, letterSpacing: 0.15, color: AppColor.text);
-TextStyle _hintTextStyle = AppTextStyle.body1Regular.copyWith(color : Color(0xffbdc1c6));
+TextStyle _hintTextStyle = AppTextStyle.bodyRegular.copyWith(color : Color(0xffbdc1c6));
 
 BorderRadius _borderRadius = BorderRadius.circular(4);
 
 
-class DropdownField<T extends BaseModel> extends StatefulWidget {
+class DropdownField<T extends BaseObject> extends StatefulWidget {
 
   DropdownFieldController<T> controller;
 
   String title;
   String placeholder;
   EdgeInsets margin;
-  EdgeInsets padding;
-  Function(T) onChange;
-  Function onAddNewPressed;
+  EdgeInsets? padding;
+  Function(T)? onChange;
+  Function? onAddNewPressed;
   bool withAdd = false;
   bool showRequiredHint = true;
 
@@ -52,7 +53,7 @@ class DropdownField<T extends BaseModel> extends StatefulWidget {
   _DropdownFieldState<T> createState() => _DropdownFieldState<T>();
 }
 
-class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
+class _DropdownFieldState<T extends BaseObject> extends State<DropdownField<T>> {
 
   BorderRadius borderRadius = BorderRadius.circular(5);
 
@@ -66,7 +67,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
     }).toList();
   }
 
-  T emptyObject;
+  T? emptyObject;
 
   @override
   void initState() {
@@ -74,7 +75,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
       Map<String, dynamic> map = new Map();
       map[widget.controller.keyId] = -1;
       map[widget.controller.valueId] = "Create New";
-      BaseModel.createFromMap<T>(map).then((value) {
+      BaseObject.createFromMap<T>(map).then((value) {
         setState(() {
           emptyObject = value;
         });
@@ -122,7 +123,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
 
                     if (state.hasError && widget.showRequiredHint)
                       Text(
-                        state.errorText,
+                        state.errorText ?? '',
                         style: _errorTextStyle,
                       ),
 
@@ -135,7 +136,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
               ),
 
               SizedBox(
-                height: 40.w,
+                height: 40,
                 child: Container(
                   decoration: BoxDecoration(
                     color: state.hasError ? _errorBgColor : _focusBgColor,
@@ -160,7 +161,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
                         Container()
                       ];
 
-                      Map data = widget.controller.value.toDatabaseMap();
+                      Map data = widget.controller.value!.toDatabaseMap();
 
                       if (data[widget.controller.keyId] == -1) {
                         return [
@@ -170,7 +171,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
 
                       return List<Widget>.from(dropdownMenuItemWidget);
                     },
-                    onChanged: (T value) {
+                    onChanged: (T? value) {
                       if (value == null) return;
 
                       if (value.toDatabaseMap()[widget.controller.keyId] == -1) {
@@ -188,7 +189,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
                       state.didChange(value);
 
                       if (widget.onChange!= null) {
-                        widget.onChange(value);
+                        widget!.onChange!(value);
                       }
                     },
                     items: [
@@ -199,7 +200,7 @@ class _DropdownFieldState<T extends BaseModel> extends State<DropdownField<T>> {
                             value: emptyObject,
                             onTap: (){
                               if (widget.onAddNewPressed != null)
-                                widget.onAddNewPressed();
+                                widget.onAddNewPressed!();
                             },
                             child: Row(
                               children: [

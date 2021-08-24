@@ -13,7 +13,7 @@ Color _errorColor = Color(0xffEB1414);
 TextStyle _errorTextStyle = TextStyle(fontSize: AppFontSize.dp12, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: 0.5, color: _errorColor);
 TextStyle _labelTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, height: 20 / 14, letterSpacing: 0.5, color: AppColor.text);
 TextStyle _bodyTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 24 / 16, letterSpacing: 0.15, color: AppColor.text);
-TextStyle _hintTextStyle = AppTextStyle.body1Regular.copyWith(color : Color(0xffbdc1c6));
+TextStyle _hintTextStyle = AppTextStyle.bodyRegular.copyWith(color : Color(0xffbdc1c6));
 
 BorderRadius _borderRadius = BorderRadius.circular(4);
 
@@ -23,21 +23,21 @@ class EditTextField extends StatefulWidget {
   FormFieldController controller;
 
   String label;
-  TextStyle textStyle;
+  TextStyle? textStyle;
   TextAlign textAlign;
 
-  EdgeInsets margin;
-  EdgeInsets padding;
+  EdgeInsets? margin;
+  EdgeInsets? padding;
 
   TextInputAction textInputAction;
 
-  String placeholder;
-  Widget prefixIcon;
-  Widget suffixIcon;
+  String? placeholder;
+  Widget? prefixIcon;
+  Widget? suffixIcon;
 
-  String prefixText;
-  String suffixText;
-  String counterText;
+  String? prefixText;
+  String? suffixText;
+  String? counterText;
 
   bool autoFocus = false;
   bool isPasswordField = false;
@@ -45,8 +45,8 @@ class EditTextField extends StatefulWidget {
 
   bool enabled = true;
 
-  ValueChanged<String> onChanged = (terms) {};
-  ValueChanged<String> onSubmitted = (terms) {};
+  ValueChanged<String>? onChanged = (terms) {};
+  ValueChanged<String>? onSubmitted = (terms) {};
 
   EditTextField(this.label,
       this.controller,
@@ -108,7 +108,7 @@ class _EditTextFieldState extends State<EditTextField> {
           }
 
           if (widget.controller.required || widget.controller.text.isNotEmpty) {
-            return widget.controller.validator(value);
+            return widget.controller.validator!(value);
           }
 
           return null;
@@ -131,7 +131,7 @@ class _EditTextFieldState extends State<EditTextField> {
 
                       if (state.hasError && widget.showRequiredHint)
                         Text(
-                          state.errorText,
+                          state.errorText ?? '',
                           style: _errorTextStyle,
                         ),
 
@@ -144,7 +144,7 @@ class _EditTextFieldState extends State<EditTextField> {
               ),
 
               SizedBox(
-                height: 40.w,
+                height: 40,
                 child: TextField(
                     key: widget.controller.fieldKey,
                     controller: widget.controller.textEditingController,
@@ -160,12 +160,12 @@ class _EditTextFieldState extends State<EditTextField> {
                       state.reset();
                       state.didChange(value);
                       if (widget.onChanged != null) {
-                        widget.onChanged(value);
+                        widget.onChanged!(value);
                       }
                     },
                     onSubmitted: (value) {
                       if (widget.onSubmitted != null) {
-                        widget.onSubmitted(value);
+                        widget.onSubmitted!(value);
                       }
                     },
                     enabled: widget.enabled,

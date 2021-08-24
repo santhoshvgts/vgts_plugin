@@ -3,14 +3,14 @@
 import 'dart:convert';
 
 import 'package:flutter/material.dart';
-import 'package:invoice/core/res/colors.dart';
+import 'package:vgts_plugin_example/res/colors.dart';
 
 class ImageView extends StatelessWidget {
 
   final String image;
   final double height;
   final double width;
-  final EdgeInsets margin;
+  final EdgeInsets? margin;
 
   ImageView(this.image, { this.height = 74, this.width = 74, this.margin });
 

@@ -23,6 +23,10 @@ class InputValidator {
     if (value?.isEmpty != false)
       return requiredText ?? "Required !";
 
+    if ((value?.split("-").length ?? 0) > 2) {
+      return requiredText ?? "Invalid Number !";
+    }
+
     return null;
   }
 
