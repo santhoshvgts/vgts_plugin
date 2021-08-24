@@ -26,8 +26,9 @@ class InputFormatter {
   ];
 
   static List<TextInputFormatter> numberFormatter = [
-    FilteringTextInputFormatter.deny(RegExp("[.]{1}")),
-    FilteringTextInputFormatter.allow(RegExp('[0-9.]')),
+    FilteringTextInputFormatter.deny(RegExp("[.]{2}")),
+    FilteringTextInputFormatter.deny(RegExp("[-]{2}")),
+    FilteringTextInputFormatter.allow(RegExp('[0-9.-]')),
   ];
 
   static List<TextInputFormatter> zipCodeFormatter = [

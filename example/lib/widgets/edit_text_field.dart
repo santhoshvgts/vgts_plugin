@@ -1,19 +1,18 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
-import 'package:invoice/core/res/colors.dart';
-import 'package:invoice/core/res/fontsize.dart';
-import 'package:invoice/core/res/styles.dart';
 import 'package:vgts_plugin/form/utils/form_field_controller.dart';
-import 'package:flutter_screenutil/flutter_screenutil.dart';
+import 'package:vgts_plugin_example/res/colors.dart';
+import 'package:vgts_plugin_example/res/fontsize.dart';
+import 'package:vgts_plugin_example/res/styles.dart';
 
 
 Color _focusBgColor = Color(0xffF8F9FF);
 Color _errorBgColor = Color(0xffFFF5F5);
 Color _errorColor = Color(0xffEB1414);
 
-TextStyle _errorTextStyle = TextStyle(fontSize: AppFontSize.dp12.sp, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: 0.5, color: _errorColor);
-TextStyle _labelTextStyle = TextStyle(fontSize: 14.sp, fontWeight: FontWeight.w500, height: 20.sp / 14.sp, letterSpacing: 0.5.sp, color: AppColor.text);
-TextStyle _bodyTextStyle = TextStyle(fontSize: 16.sp, fontWeight: FontWeight.w400, height: 24 / 16, letterSpacing: 0.15.sp, color: AppColor.text);
+TextStyle _errorTextStyle = TextStyle(fontSize: AppFontSize.dp12, fontWeight: FontWeight.w400, height: 1.5, letterSpacing: 0.5, color: _errorColor);
+TextStyle _labelTextStyle = TextStyle(fontSize: 14, fontWeight: FontWeight.w500, height: 20 / 14, letterSpacing: 0.5, color: AppColor.text);
+TextStyle _bodyTextStyle = TextStyle(fontSize: 16, fontWeight: FontWeight.w400, height: 24 / 16, letterSpacing: 0.15, color: AppColor.text);
 TextStyle _hintTextStyle = AppTextStyle.body1Regular.copyWith(color : Color(0xffbdc1c6));
 
 BorderRadius _borderRadius = BorderRadius.circular(4);
