@@ -15,6 +15,13 @@ class InputFormatter {
     ),
   ];
 
+  static List<TextInputFormatter> vehicleFormatter = [
+    MaskedTextInputFormatter(
+      mask: 'xx xx xx xxxx',
+      separator: '-',
+    ),
+  ];
+
   static List<TextInputFormatter> nameFormatter = [
     FilteringTextInputFormatter.deny(RegExp("[ ]{2}")),
     FilteringTextInputFormatter.deny(RegExp("[,]{1}")),
