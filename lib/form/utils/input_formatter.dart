@@ -18,7 +18,7 @@ class InputFormatter {
   static List<TextInputFormatter> vehicleFormatter = [
     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\ \\,]')),
     MaskedTextInputFormatter(
-      mask: 'xxxx xxxx xxxx',
+      mask: 'xxxx xx xxxx',
       separator: ' ',
     ),
   ];
