@@ -209,7 +209,7 @@ class FormFieldController {
   FormFieldController(this.fieldKey, {
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
-    this.validator,
+    this.validator = InputValidator.emptyValidator,
     this.inputFormatter = const [],
     this.maxLength = 1000,
     this.minLines = 1,

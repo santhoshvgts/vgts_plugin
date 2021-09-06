@@ -69,7 +69,7 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
 
                         EditTextField(
                           "Company Name",
-                          viewModel.companyNameController,
+                          viewModel.gstNoController,
                           placeholder: "Enter Company Name",
                           //  margin: EdgeInsets.only(top: 15.0),
                           onChanged: (value) {},
