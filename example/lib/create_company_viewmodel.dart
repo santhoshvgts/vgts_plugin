@@ -30,7 +30,7 @@ class CreateCompanyViewModel extends BaseViewModel {
   NumberFormFieldController zipCodeController = NumberFormFieldController(ValueKey("txtZipCode"), required: true);
   NumberFormFieldController numberFormFieldController = NumberFormFieldController(ValueKey("txtAmount"), required: true);
 
-  FormFieldController gstNoController = FormFieldController(ValueKey("txtGstNo"),required: false, validator: InputValidator.emailValidator);
+  FormFieldController gstNoController = FormFieldController(ValueKey("txtGstNo"),required: false, validator: (value) => InputValidator.emailValidator(value, requiredText: "sdf,ajsdhdfkjs"));
   // TextFormFieldController gstNoController = TextFormFieldController(ValueKey("txtGstNo"),textCapital: TextCapitalization.characters,required: true);
   TextFormFieldController percentController = TextFormFieldController(ValueKey("txtPercent"),required: true);
   TextFormFieldController bankNameController = TextFormFieldController(ValueKey("txtBankName"),required: true);

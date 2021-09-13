@@ -73,4 +73,14 @@ class InputValidator {
     return null;
   }
 
+  static String? gstNumberValidator(String? value, { String? requiredText }) {
+    if (value?.isEmpty != false)
+      return requiredText ?? "Required !";
+
+    if (value?.length != 15) {
+      return requiredText ?? "Invalid GST Number !";
+    }
+
+    return null;
+  }
 }
