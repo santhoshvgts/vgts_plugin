@@ -25,8 +25,8 @@ class InputFormatter {
 
   static List<TextInputFormatter> nameFormatter = [
     FilteringTextInputFormatter.deny(RegExp("[ ]{2}")),
-    FilteringTextInputFormatter.deny(RegExp("[,]{1}")),
-    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\ \\,]'))
+    // FilteringTextInputFormatter.deny(RegExp("[,]{1}")),
+    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\ ]'))
   ];
 
   static List<TextInputFormatter> defaultFormatter = [
