@@ -38,6 +38,7 @@ class InputFormatter {
     FilteringTextInputFormatter.deny(RegExp("[-]{2}")),
     // FilteringTextInputFormatter.allow(RegExp('[0-9.-]')),
     FilteringTextInputFormatter.allow(RegExp(r'[0-9\\-]*\.?[0-9]*$')),
+    FilteringTextInputFormatter.allow(RegExp(r'^[^-]*-[^-]*$')),
   ];
 
   static List<TextInputFormatter> zipCodeFormatter = [
