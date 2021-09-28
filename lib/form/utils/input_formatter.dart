@@ -8,7 +8,7 @@ class InputFormatter {
   ];
 
   static List<TextInputFormatter> adhaarNoFormatter = [
-    FilteringTextInputFormatter.allow(RegExp('[0-9\\ \\,]')),
+    FilteringTextInputFormatter.allow(RegExp('[0-9\\ ]')),
     MaskedTextInputFormatter(
       mask: 'xxxx xxxx xxxx',
       separator: ' ',
