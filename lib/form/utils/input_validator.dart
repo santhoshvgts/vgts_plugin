@@ -3,14 +3,14 @@
 class InputValidator {
 
   static String? emptyValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
     return null;
   }
 
   static String? nameValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
     if (value!.trim()!.length < 3)
@@ -20,10 +20,10 @@ class InputValidator {
   }
 
   static String? numberValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
-    if ((value?.split("-").length ?? 0) > 2) {
+    if ((value?.trim()?.split("-").length ?? 0) > 2) {
       return requiredText ?? "Invalid Number !";
     }
 
@@ -31,7 +31,7 @@ class InputValidator {
   }
 
   static String? phoneValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
     if (value!.length < 10)
@@ -41,7 +41,7 @@ class InputValidator {
   }
 
   static String? emailValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
     if (!RegExp(r"^[a-zA-Z0-9.!#$%&'*+/=?^_`{|}~-]+@[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?(?:\.[a-zA-Z0-9](?:[a-zA-Z0-9-]{0,253}[a-zA-Z0-9])?)*$").hasMatch(value!)) {
@@ -52,7 +52,7 @@ class InputValidator {
   }
 
   static String? adhaarValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
     if (!RegExp(r"[0-9]{4}[\\ ][0-9]{4}[\\ ][0-9]{4}$").hasMatch(value!)) {
@@ -63,7 +63,7 @@ class InputValidator {
   }
 
   static String? panNumberValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
     if (!RegExp(r"[A-Z]{5}[0-9]{4}[A-Z]{1}").hasMatch(value!)) {
@@ -74,10 +74,10 @@ class InputValidator {
   }
 
   static String? gstNumberValidator(String? value, { String? requiredText }) {
-    if (value?.isEmpty != false)
+    if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
-    if (value?.length != 15) {
+    if (value?.trim()?.length != 15) {
       return requiredText ?? "Invalid GST Number !";
     }
 
