@@ -5,6 +5,58 @@ import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
 
+
+//  Base Form Field Controller
+//  This controller will be used as Parent class for pre templated form field
+//
+class FormFieldController {
+
+  Key fieldKey;
+
+  TextEditingController textEditingController = new TextEditingController();
+  FocusNode _focusNode = new FocusNode();
+
+  TextCapitalization textCapitalization = TextCapitalization.none;
+
+  String? Function(String?)? validator = (String? p1) => InputValidator.emptyValidator(p1,);
+  List<TextInputFormatter> inputFormatter = InputFormatter.defaultFormatter;
+
+  TextInputType textInputType;
+
+  bool required;
+
+  int maxLength;
+  int minLines;
+  int maxLines;
+
+  String get text => textEditingController.text;
+
+  set text(value) {
+    textEditingController.text = value;
+  }
+
+  clear() {
+    textEditingController.clear();
+  }
+
+  FocusNode get focusNode => _focusNode;
+
+  bool get hasFocus => focusNode.hasFocus;
+
+  FormFieldController(this.fieldKey, {
+    this.textInputType = TextInputType.text,
+    this.textCapitalization = TextCapitalization.none,
+    this.validator = InputValidator.emptyValidator,
+    this.inputFormatter = const [],
+    this.maxLength = 1000,
+    this.minLines = 1,
+    this.maxLines = 1000,
+    this.required = false
+  });
+
+}
+
+
 //  Phone Form Field Controller
 //  This controller used for only Phone Number Field
 //
@@ -172,53 +224,21 @@ class TextFormFieldController extends FormFieldController {
 
 }
 
-class FormFieldController {
-
-  Key fieldKey;
-
-  TextEditingController textEditingController = new TextEditingController();
-  FocusNode _focusNode = new FocusNode();
-
-  TextCapitalization textCapitalization = TextCapitalization.none;
-
-  String? Function(String?)? validator = (String? p1) => InputValidator.emptyValidator(p1,);
-  List<TextInputFormatter> inputFormatter = InputFormatter.defaultFormatter;
-
-  TextInputType textInputType;
-
-  bool required;
-
-  int maxLength;
-  int minLines;
-  int maxLines;
-
-  String get text => textEditingController.text;
-
-  set text(value) {
-    textEditingController.text = value;
-  }
-
-  clear() {
-    textEditingController.clear();
-  }
-
-  FocusNode get focusNode => _focusNode;
-
-  bool get hasFocus => focusNode.hasFocus;
-
-  FormFieldController(this.fieldKey, {
-    this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
-    this.validator = InputValidator.emptyValidator,
-    this.inputFormatter = const [],
-    this.maxLength = 1000,
-    this.minLines = 1,
-    this.maxLines = 1000,
-    this.required = false
-  });
-
-}
-
+//  Dropdown Form Field Controller
+//  This controller is used for dropdownfield
+//
+//  [Param]
+//  * key - resourceId
+//
+//  [Named Param]
+//  * keyId - unique key to find the primaryKey value in Model
+//  * valueId - unique key to find the displayText value in Model
+//
+//  [Optional Param]
+//  * required - default will be false
+//  * value - default value
+//  * dataList - list of objects (object should extend BaseObject)
+//
 class DropdownFieldController<T extends BaseObject> {
 
   Key fieldKey;
@@ -229,7 +249,7 @@ class DropdownFieldController<T extends BaseObject> {
   String valueId;
   bool required;
 
-  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.dataList = const [], this.required = true });
+  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.value, this.dataList = const [], this.required = true });
 
   String? validator(T? value) {
     if (value == null && required)
@@ -250,6 +270,55 @@ class DropdownFieldController<T extends BaseObject> {
   }
 
 }
+
+//  MultiSelection Form Field Controller
+//  This controller is used for dropdownfield
+//
+//  [Param]
+//  * key - resourceId
+//
+//  [Named Param]
+//  * keyId - unique key to find the primaryKey value in Model
+//  * valueId - unique key to find the displayText value in Model
+//
+//  [Optional Param]
+//  * required - default will be false
+//  * value - default selected list of value
+//  * dataList - list of objects (object should extend BaseObject)
+//
+class MultiSelectionFieldController<T extends BaseObject> {
+
+  Key fieldKey;
+  FocusNode focusNode = new FocusNode();
+  List<T> value;
+  List<T> dataList;
+  String keyId;
+  String valueId;
+  bool required;
+
+  MultiSelectionFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.value = const [], this.dataList = const [], this.required = true });
+
+  String? validator(T? value) {
+    if (value == null && required)
+      return "Required !";
+
+    return null;
+  }
+
+  setValue(List<T> value) {
+    this.value = value;
+  }
+
+  List<T> get list => dataList;
+
+  set list(List<T> list) {
+    this.value = [];
+    this.dataList = list;
+  }
+
+}
+
+
 
 class ImageFieldController {
 
