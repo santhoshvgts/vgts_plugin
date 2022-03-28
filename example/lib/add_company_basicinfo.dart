@@ -47,7 +47,7 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
 
                         EditTextField(
                           "Amount",
-                          viewModel.numberFormFieldController,
+                          viewModel.amountController,
                           placeholder: "Enter Amount",
                           //  margin: EdgeInsets.only(top: 15.0),
                           onChanged: (value) {},

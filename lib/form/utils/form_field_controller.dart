@@ -233,7 +233,7 @@ class AmountFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
+  List<TextInputFormatter> get inputFormatter => InputFormatter.defaultFormatter;
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;

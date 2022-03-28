@@ -21,6 +21,7 @@ class CreateCompanyViewModel extends BaseViewModel {
   );
   NameFormFieldController companyNameController = NameFormFieldController(ValueKey("txtCompanyName"), requiredText: "Please Enter Company Name");
   NameFormFieldController fullNameController = NameFormFieldController(ValueKey("txtFullName"));
+  AmountFormFieldController amountController = AmountFormFieldController(ValueKey("amount"));
   PhoneFormFieldController phoneController = PhoneFormFieldController(ValueKey("txtPhone"));
   EmailFormFieldController emailController = EmailFormFieldController(ValueKey("txtEmail"), required: false);
   TextFormFieldController websiteController = TextFormFieldController(ValueKey("txtWebsite"),);
