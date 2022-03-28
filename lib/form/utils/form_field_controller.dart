@@ -224,6 +224,8 @@ class AmountFormFieldController extends FormFieldController {
 
   AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText }) : super.amount(fieldKey, required: required);
 
+  double get numberValue => (textEditingController as _MoneyMaskedTextController).numberValue;
+
   @override
   String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
 
