@@ -68,6 +68,10 @@ class FormFieldController {
     this.textEditingController = _MoneyMaskedTextController(initialValue: 0, thousandSeparator: ",", decimalSeparator: ".", precision: 2);
   }
 
+  dispose(){
+    _focusNode.dispose();
+    _focusNode = FocusNode();
+  }
 
 }
 
@@ -314,6 +318,10 @@ class DropdownFieldController<T extends BaseObject> {
   set list(List<T> list) {
     this.value = null;
     this.dataList = list;
+  }
+
+  clear() {
+    list = [];
   }
 
 }
