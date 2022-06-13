@@ -29,6 +29,8 @@ class FormFieldController {
   int minLines;
   int maxLines;
 
+  String? overrideErrorText;
+
   String get text => textEditingController.text;
 
   set text(value) {
