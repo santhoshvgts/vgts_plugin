@@ -89,4 +89,19 @@ class InputValidator {
 
     return null;
   }
+
+  static String? passwordValidator(String? value,{String? requiredText}) {
+    RegExp regex =
+    RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+    if (value?.trim()?.isEmpty != false) {
+      return requiredText ?? 'Required !';
+    } else {
+      if (!regex.hasMatch(value!)) {
+        return "Password must be atleast 8 characters that include lowercase,\nuppercase character, special character & number ";
+      } else {
+        return null;
+      }
+    }
+  }
+
 }

@@ -110,6 +110,7 @@ class PhoneFormFieldController extends FormFieldController {
 
 }
 
+
 //  Email Address Form Field Controller
 //  This controller used for only Email Address Field
 //
@@ -275,6 +276,20 @@ class TextFormFieldController extends FormFieldController {
   @override
   TextCapitalization get textCapitalization => this.textCapital?? TextCapitalization.sentences;
 
+}
+
+
+class PasswordFormFieldController extends FormFieldController{
+
+  String? requiredText;
+
+  PasswordFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
+
+  @override
+  String? Function(String? p1)? get validator => (String? p1) => InputValidator.passwordValidator(p1, requiredText: requiredText);
+
+  @override
+  TextInputType get textInputType => TextInputType.visiblePassword;
 }
 
 //  Dropdown Form Field Controller
