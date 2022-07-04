@@ -414,19 +414,6 @@ class ImageFieldController {
 
 }
 
-class PasswordFormFieldController extends FormFieldController{
-
-  String? requiredText;
-
-  PasswordFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
-
-  @override
-  String? Function(String? p1)? get validator => (String? p1) => InputValidator.passwordValidator(p1, requiredText: requiredText);
-
-  @override
-  TextInputType get textInputType => TextInputType.visiblePassword;
-}
-
 
 /// A [TextEditingController] extended to apply masks to currency values
 class _MoneyMaskedTextController extends TextEditingController {
