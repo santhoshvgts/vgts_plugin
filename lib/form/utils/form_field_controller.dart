@@ -414,6 +414,34 @@ class ImageFieldController {
 
 }
 
+class PasswordFormFieldController extends FormFieldController{
+
+  String? requiredText;
+
+  PasswordFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
+
+  @override
+  String? Function(String? p1)? get validator => (String? p1) => InputValidator.passwordValidator(p1, requiredText: requiredText);
+
+  @override
+  TextInputType get textInputType => TextInputType.visiblePassword;
+}
+
+
+static String? passwordValidator(String? value,{String? requiredText}) {
+  RegExp regex =
+  RegExp(r'^(?=.*?[A-Z])(?=.*?[a-z])(?=.*?[0-9])(?=.*?[!@#\$&*~]).{8,}$');
+  if (value?.trim()?.isEmpty != false) {
+    return requiredText ?? 'Required !';
+  } else {
+    if (!regex.hasMatch(value!)) {
+      return "Password must be atleast 8 characters that include uppercase,lowercase, special character & number ";
+    } else {
+      return null;
+    }
+  }
+}
+
 
 /// A [TextEditingController] extended to apply masks to currency values
 class _MoneyMaskedTextController extends TextEditingController {
@@ -638,3 +666,4 @@ class _MoneyMaskedTextController extends TextEditingController {
     return masked;
   }
 }
+
