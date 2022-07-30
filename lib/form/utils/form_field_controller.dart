@@ -253,6 +253,23 @@ class AmountFormFieldController extends FormFieldController {
   }
 
   @override
+  set text(value) {
+    NumberFormat formatter = NumberFormat.currency(
+      name: "INR",
+      locale: 'en_IN',
+      decimalDigits: 0,
+      symbol: '₹',
+    );
+    try {
+      textEditingController.text = formatter.format(double.parse(value));
+    } catch (ex) {
+      print(value);
+      print(ex);
+      textEditingController.text = value;
+    }
+  }
+
+  @override
   String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
 
   @override
