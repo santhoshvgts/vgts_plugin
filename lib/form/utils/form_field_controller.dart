@@ -254,7 +254,7 @@ class AmountFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 15), ...InputFormatter.numberFormatter ];
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 15), ...InputFormatter.numberFormatter, FilteringTextInputFormatter.allow(RegExp(r"^[\d,\s]+$")) ];
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
