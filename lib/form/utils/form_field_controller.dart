@@ -234,6 +234,10 @@ class AmountFormFieldController extends FormFieldController {
 
   @override
   String get text {
+    if (textEditingController.text.isEmpty == true) {
+      return "";
+    }
+
     NumberFormat formatter = NumberFormat.currency(
       name: "INR",
       locale: 'en_IN',

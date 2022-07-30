@@ -99,8 +99,11 @@ class CurrencyInputFormatter extends TextInputFormatter {
       symbol: '₹',
     );
 
-    print(formatter.parse(newValue.text).toStringAsFixed(0));
-    String newValueText = formatter.parse(newValue.text).toStringAsFixed(0);
+    String newValueText = '';
+    try {
+      newValueText = formatter.parse(newValue.text).toString();
+    } catch(ex) {
+    }
 
     if (oldValueText == newValue.text) {
       newValueText = newValueText.substring(0, newValue.selection.end - 1) +
