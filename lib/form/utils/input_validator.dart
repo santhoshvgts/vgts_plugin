@@ -19,6 +19,22 @@ class InputValidator {
     return null;
   }
 
+  static String? amountValidator(String? value, { String? requiredText }) {
+    if (value?.trim()?.isEmpty != false){
+      return requiredText ?? "Required !";
+    }
+
+    String trimmedValue = value?.trim().replaceAll(",", "").replaceAll("₹", "") ?? '';
+    if (trimmedValue.isEmpty == true) {
+      return requiredText ?? "Required !";
+    }
+
+    if (trimmedValue.contains(RegExp(r"[A-Z]"))){
+      return "Invalid Amount Format";
+    }
+    return null;
+  }
+
   static String? numberValidator(String? value, { String? requiredText }) {
     if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";

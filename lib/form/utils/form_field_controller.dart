@@ -248,13 +248,13 @@ class AmountFormFieldController extends FormFieldController {
   }
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.amountValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 15), ...InputFormatter.numberFormatter, FilteringTextInputFormatter.allow(RegExp(r"^[\d,\s]+$")) ];
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 15) ];
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
