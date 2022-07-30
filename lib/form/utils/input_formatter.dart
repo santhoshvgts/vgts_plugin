@@ -1,5 +1,6 @@
 
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 
 class InputFormatter {
 
@@ -71,5 +72,46 @@ class MaskedTextInputFormatter extends TextInputFormatter {
       }
     }
     return newValue;
+  }
+}
+
+
+class CurrencyInputFormatter extends TextInputFormatter {
+  CurrencyInputFormatter({this.maxDigits = 10});
+  final int maxDigits;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.selection.baseOffset == 0) {
+      return newValue;
+    }
+    if (newValue.selection.baseOffset > maxDigits) {
+      return oldValue;
+    }
+
+    final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+
+    NumberFormat formatter = NumberFormat.currency(
+      name: "INR",
+      locale: 'en_IN',
+      decimalDigits: 0,
+      symbol: '₹',
+    );
+
+    print(formatter.parse(newValue.text).toStringAsFixed(0));
+    String newValueText = formatter.parse(newValue.text).toStringAsFixed(0);
+
+    if (oldValueText == newValue.text) {
+      newValueText = newValueText.substring(0, newValue.selection.end - 1) +
+          newValueText.substring(newValue.selection.end, newValueText.length);
+    }
+
+    double value = double.parse(newValueText);
+    String newText = formatter.format(value);
+
+    return newValue.copyWith(
+        text: newText,
+        selection: TextSelection.collapsed(offset: newText.length));
   }
 }

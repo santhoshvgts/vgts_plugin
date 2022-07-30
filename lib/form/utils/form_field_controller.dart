@@ -1,6 +1,7 @@
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:intl/intl.dart';
 import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
@@ -57,18 +58,18 @@ class FormFieldController {
   });
 
 
-  FormFieldController.amount(this.fieldKey, {
-    this.textInputType = TextInputType.text,
-    this.textCapitalization = TextCapitalization.none,
-    this.validator = InputValidator.emptyValidator,
-    this.inputFormatter = const [],
-    this.maxLength = 1000,
-    this.minLines = 1,
-    this.maxLines = 1000,
-    this.required = false,
-  }) {
-    this.textEditingController = _MoneyMaskedTextController(initialValue: 0, thousandSeparator: ",", decimalSeparator: ".", precision: 2);
-  }
+  // FormFieldController.amount(this.fieldKey, {
+  //   this.textInputType = TextInputType.text,
+  //   this.textCapitalization = TextCapitalization.none,
+  //   this.validator = InputValidator.emptyValidator,
+  //   this.inputFormatter = const [],
+  //   this.maxLength = 1000,
+  //   this.minLines = 1,
+  //   this.maxLines = 1000,
+  //   this.required = false,
+  // }) {
+  //   this.textEditingController = _MoneyMaskedTextController(initialValue: 0, thousandSeparator: ",", decimalSeparator: ".", precision: 2);
+  // }
 
   dispose(){
     _focusNode.dispose();
@@ -229,9 +230,18 @@ class AmountFormFieldController extends FormFieldController {
 
   String? requiredText;
 
-  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText }) : super.amount(fieldKey, required: required);
+  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText }) : super(fieldKey, required: required);
 
-  double get numberValue => (textEditingController as _MoneyMaskedTextController).numberValue;
+  @override
+  String get text {
+    NumberFormat formatter = NumberFormat.currency(
+      name: "INR",
+      locale: 'en_IN',
+      decimalDigits: 0,
+      symbol: '₹',
+    );
+    return formatter.parse(textEditingController.text).toString();
+  }
 
   @override
   String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
@@ -240,7 +250,7 @@ class AmountFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => InputFormatter.defaultFormatter;
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50) ];
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
