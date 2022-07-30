@@ -226,6 +226,7 @@ class NumberFormFieldController extends FormFieldController {
 //  [Optional Param]
 //  * required - default will be false
 //
+
 class AmountFormFieldController extends FormFieldController {
 
   String? requiredText;
@@ -242,24 +243,29 @@ class AmountFormFieldController extends FormFieldController {
       name: "INR",
       locale: 'en_IN',
       decimalDigits: 0,
-      symbol: '',
+      symbol: '₹',
     );
+    String value = textEditingController.text.replaceAll(" ", "");
+    if (value.trim() == "₹"){
+      return "";
+    }
     return formatter.parse(textEditingController.text).toString();
   }
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.amountValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 15) ];
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50) ];
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 
 }
+
 
 
 //  Text Form Field Controller
