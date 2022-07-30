@@ -242,7 +242,7 @@ class AmountFormFieldController extends FormFieldController {
       name: "INR",
       locale: 'en_IN',
       decimalDigits: 0,
-      symbol: '₹',
+      symbol: '',
     );
     return formatter.parse(textEditingController.text).toString();
   }
@@ -254,7 +254,7 @@ class AmountFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50) ];
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 15), ...InputFormatter.numberFormatter ];
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
