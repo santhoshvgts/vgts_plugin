@@ -75,8 +75,8 @@ class MaskedTextInputFormatter extends TextInputFormatter {
   }
 }
 
-
 class CurrencyInputFormatter extends TextInputFormatter {
+
   CurrencyInputFormatter({this.maxDigits = 10});
   final int maxDigits;
 
@@ -106,12 +106,14 @@ class CurrencyInputFormatter extends TextInputFormatter {
     }
 
     if (oldValueText == newValue.text) {
-      newValueText = newValueText.substring(0, newValue.selection.end - 1) +
-          newValueText.substring(newValue.selection.end, newValueText.length);
+      newValueText = newValueText.substring(0, newValue.selection.end - 1) + newValueText.substring(newValue.selection.end, newValueText.length);
     }
 
-    double value = double.parse(newValueText);
-    String newText = formatter.format(value);
+    String newText = "";
+    if (newValueText.isNotEmpty) {
+      double value = double.parse(newValueText);
+      newText = formatter.format(value);
+    }
 
     return newValue.copyWith(
         text: newText,
