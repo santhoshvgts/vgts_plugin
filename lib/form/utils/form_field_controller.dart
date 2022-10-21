@@ -188,6 +188,18 @@ class NameFormFieldController extends FormFieldController {
 
 }
 
+class IdFormFieldController extends FormFieldController{
+
+  String? requiredText;
+
+  IdFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
+
+  @override
+  String? Function(String? p1)? get validator => (String? p1) => InputValidator.idValidator(value);
+
+}
+
+
 //  Number Form Field Controller
 //  This controller used for number text field like Amount, Quantity, Age etc.
 //
