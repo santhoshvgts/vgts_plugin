@@ -34,6 +34,16 @@ class InputValidator {
     }
     return null;
   }
+  
+  static String? idValidator(String? value, { String? requiredText }) {
+  if (value?.trim()?.isEmpty != false)
+    return requiredText ?? "Required !";
+
+  if (value!.trim()!.length < 4)
+    return "School Id must be atleast 4 characters";
+
+  return null;
+}
 
   static String? numberValidator(String? value, { String? requiredText }) {
     if (value?.trim()?.isEmpty != false)
