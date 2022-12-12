@@ -113,6 +113,17 @@ class PhoneFormFieldController extends FormFieldController {
 
 }
 
+class IdFormFieldController extends FormFieldController {
+
+  String? requiredText;
+
+  IdFormFieldController(Key fieldKey, { bool required = true, this.requiredText}) : super(fieldKey, required: required);
+
+  @override
+  String? Function(String? p1)? get validator => (String? p1) => InputValidator.idValidator(p1);
+
+}
+
 
 //  Email Address Form Field Controller
 //  This controller used for only Email Address Field
@@ -161,6 +172,8 @@ class MultiLineFormFieldController extends FormFieldController {
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 }
 
+
+
 //  Name Form Field Controller
 //  This controller used for name text field like Full Name, Last Name.
 //
@@ -189,6 +202,9 @@ class NameFormFieldController extends FormFieldController {
   TextCapitalization get textCapitalization => TextCapitalization.words;
 
 }
+
+
+
 
 //  Number Form Field Controller
 //  This controller used for number text field like Amount, Quantity, Age etc.
