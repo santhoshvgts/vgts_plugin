@@ -25,6 +25,7 @@ class FormFieldController {
   TextInputType textInputType;
 
   bool required;
+  bool allowPaste;
 
   int maxLength;
   int minLines;
@@ -55,6 +56,7 @@ class FormFieldController {
     this.minLines = 1,
     this.maxLines = 1000,
     this.required = false,
+    this.allowPaste = true,
   });
 
 
@@ -207,7 +209,7 @@ class NumberFormFieldController extends FormFieldController {
   String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
 
   @override
-  TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
+  TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true,);
 
   @override
   List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
@@ -279,10 +281,75 @@ class AmountFormFieldController extends FormFieldController {
   List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50) ];
 
   @override
+  bool get allowPaste => false;
+
+  @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 
 }
 
+
+class AgeFormFieldController extends FormFieldController {
+  String? requiredText;
+  int minAge;
+
+  AgeFormFieldController(Key fieldKey, {bool required = false, this.requiredText, this.minAge = 10}) : super(fieldKey, required: required);
+
+  @override
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) {
+    String? value = InputValidator.numberValidator(p1, requiredText: requiredText);
+    if (value != null) {
+      return value;
+    }
+
+    int age = int.tryParse(p1.toString()) ?? 0;
+    if (age < minAge) {
+      return "Age should be ${minAge} or above";
+    }
+  };
+
+  @override
+  int get maxLength => 2;
+
+  @override
+  TextInputType get textInputType => const TextInputType.numberWithOptions(decimal: false);
+
+  @override
+  List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
+
+  @override
+  bool get allowPaste => false;
+
+  @override
+  TextCapitalization get textCapitalization => TextCapitalization.sentences;
+}
+
+
+class PercentageFormFieldController extends FormFieldController {
+  String? requiredText;
+
+  PercentageFormFieldController(Key fieldKey, {bool required = false, this.requiredText}) : super(fieldKey, required: required);
+
+  @override
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
+
+  @override
+  int get maxLength => 3;
+
+  @override
+  TextInputType get textInputType => const TextInputType.numberWithOptions(decimal: false, signed: false);
+
+  @override
+  bool get allowPaste => false;
+
+  @override
+  List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
+
+  @override
+  TextCapitalization get textCapitalization => TextCapitalization.sentences;
+}
 
 
 //  Text Form Field Controller
