@@ -45,6 +45,10 @@ class InputFormatter {
     FilteringTextInputFormatter.allow(RegExp('[0-9-]')),
   ];
 
+  @deprecated
+  static List<TextInputFormatter> ifscFormatter = [
+    FilteringTextInputFormatter.allow(RegExp(r'[A-Z]{4}[A-Z0-9]{6}$')),
+  ];
 }
 
 class MaskedTextInputFormatter extends TextInputFormatter {

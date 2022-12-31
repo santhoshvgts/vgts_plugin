@@ -13,7 +13,7 @@ class InputValidator {
     if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
 
-    if (value!.trim()!.length < 3)
+    if (value!.trim().length < 3)
       return "Name should be more than 3 letters";
 
     return null;
@@ -115,6 +115,22 @@ class InputValidator {
 
     return null;
   }
+
+  static String? ifscValidator(String? value, { String? requiredText }) {
+    if (value?.trim()?.isEmpty != false)
+      return requiredText ?? "Required !";
+
+    if (value?.trim()?.length != 11) {
+      return requiredText ?? "Invalid IFSC Code !";
+    }
+
+    if (!RegExp(r"^[A-Z]{4}0[A-Z0-9]{6}$").hasMatch(value!)) {
+      return "Please enter a valid IFSC Code";
+    }
+
+    return null;
+  }
+
 
   static String? passwordValidator(String? value,{String? requiredText}) {
     RegExp regex =
