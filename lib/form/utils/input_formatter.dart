@@ -30,6 +30,13 @@ class InputFormatter {
     FilteringTextInputFormatter.allow(RegExp('[a-zA-Z0-9\\ ]'))
   ];
 
+  static List<TextInputFormatter> nameStrictFormatter = [
+    FilteringTextInputFormatter.deny(RegExp("[ ]{2}")),
+    FilteringTextInputFormatter.deny(RegExp("^[\\ ]{0,1}")),
+    FilteringTextInputFormatter.deny(RegExp("^[0-9]{0,3}")),
+    FilteringTextInputFormatter.allow(RegExp('[a-zA-Z\\ ]'))
+  ];
+
   static List<TextInputFormatter> defaultFormatter = [
     FilteringTextInputFormatter.deny(new RegExp('[\\ ]')),
   ];

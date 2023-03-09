@@ -187,7 +187,13 @@ class NameFormFieldController extends FormFieldController {
 
   String? requiredText;
 
+  bool _strictFormatter = false;
+
   NameFormFieldController(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required);
+
+  NameFormFieldController.strict(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required) {
+   _strictFormatter = true;
+  }
 
   @override
   String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.nameValidator(p1, requiredText: requiredText);
@@ -196,7 +202,7 @@ class NameFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.name;
 
   @override
-  List<TextInputFormatter> get inputFormatter => InputFormatter.nameFormatter;
+  List<TextInputFormatter> get inputFormatter => _strictFormatter ? InputFormatter.nameStrictFormatter : InputFormatter.nameFormatter;
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.words;
