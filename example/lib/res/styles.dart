@@ -12,7 +12,6 @@ class AppStyle {
   static final ThemeData appTheme = ThemeData(
     primaryColor: AppColor.primary,
     primaryColorDark: AppColor.primaryDark,
-    accentColor: AppColor.accent,
     dividerColor: AppColor.black10,
     brightness: Brightness.light,
     indicatorColor: AppColor.primaryDark,
@@ -24,7 +23,6 @@ class AppStyle {
     ),
     appBarTheme: AppBarTheme().copyWith(
       color: AppColor.white,
-      brightness: Brightness.dark,
     ),
     backgroundColor: AppColor.background,
     fontFamily: "GeneralSans",
