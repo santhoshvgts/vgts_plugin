@@ -44,4 +44,6 @@ class Currency extends BaseObject {
   }
 
 
+  @override
+  List<Object?> get props => [id];
 }
