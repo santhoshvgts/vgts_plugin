@@ -328,8 +328,9 @@ class AgeFormFieldController extends FormFieldController {
 
     int age = int.tryParse(p1.toString()) ?? 0;
     if (age < minAge) {
-      return "Age should be ${minAge} or above";
+      return "Age should be $minAge or above";
     }
+    return null;
   };
 
   @override

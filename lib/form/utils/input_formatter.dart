@@ -1,15 +1,24 @@
-
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
 
-class InputFormatter {
+import 'dart:math' as math;
 
+class InputFormatter {
   static List<TextInputFormatter> phoneNoFormatter = [
     FilteringTextInputFormatter.digitsOnly,
   ];
 
   static List<TextInputFormatter> adhaarNoFormatter = [
     FilteringTextInputFormatter.allow(RegExp('[0-9\\ ]')),
+    MaskedTextInputFormatter(
+      mask: 'xxxx xxxx xxxx',
+      separator: ' ',
+    ),
+  ];
+
+  static List<TextInputFormatter> gstNoFormatter = [
+    FilteringTextInputFormatter.allow(
+        RegExp(r"[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}")),
     MaskedTextInputFormatter(
       mask: 'xxxx xxxx xxxx',
       separator: ' ',
@@ -68,13 +77,16 @@ class MaskedTextInputFormatter extends TextInputFormatter {
   });
 
   @override
-  TextEditingValue formatEditUpdate(TextEditingValue oldValue, TextEditingValue newValue) {
-    if(newValue.text.length > 0) {
-      if(newValue.text.length > oldValue.text.length) {
-        if(newValue.text.length > mask.length) return oldValue;
-        if(newValue.text.length < mask.length && mask[newValue.text.length - 1] == separator) {
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    if (newValue.text.length > 0) {
+      if (newValue.text.length > oldValue.text.length) {
+        if (newValue.text.length > mask.length) return oldValue;
+        if (newValue.text.length < mask.length &&
+            mask[newValue.text.length - 1] == separator) {
           return TextEditingValue(
-            text: '${oldValue.text}$separator${newValue.text.substring(newValue.text.length-1)}',
+            text:
+                '${oldValue.text}$separator${newValue.text.substring(newValue.text.length - 1)}',
             selection: TextSelection.collapsed(
               offset: newValue.selection.end + 1,
             ),
@@ -87,9 +99,9 @@ class MaskedTextInputFormatter extends TextInputFormatter {
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
-
-  CurrencyInputFormatter({this.maxDigits = 10});
+  CurrencyInputFormatter({this.maxDigits = 10, this.isSubtract = false});
   final int maxDigits;
+  final bool isSubtract;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -107,17 +119,17 @@ class CurrencyInputFormatter extends TextInputFormatter {
       name: "INR",
       locale: 'en_IN',
       decimalDigits: 0,
-      symbol: '₹',
+      symbol: !isSubtract ? '-₹' : '₹',
     );
 
     String newValueText = '';
     try {
       newValueText = formatter.parse(newValue.text).toString();
-    } catch(ex) {
-    }
+    } catch (ex) {}
 
     if (oldValueText == newValue.text) {
-      newValueText = newValueText.substring(0, newValue.selection.end - 1) + newValueText.substring(newValue.selection.end, newValueText.length);
+      newValueText = newValueText.substring(0, newValue.selection.end - 1) +
+          newValueText.substring(newValue.selection.end, newValueText.length);
     }
 
     String newText = "";
@@ -129,5 +141,45 @@ class CurrencyInputFormatter extends TextInputFormatter {
     return newValue.copyWith(
         text: newText,
         selection: TextSelection.collapsed(offset: newText.length));
+  }
+}
+
+class PercentageNumberFormatter extends TextInputFormatter {
+  PercentageNumberFormatter({this.decimalRange = 2});
+
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    if (nValue.startsWith('.')) {
+      nValue = '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldValue.text;
+      } else {
+        if (nValue.split('.').length > 2) {
+          List<String> split = nValue.split('.');
+          nValue = split[0] + '.' + split[1];
+        }
+      }
+    }
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: math.min(nValue.length, nValue.length + 1),
+      extentOffset: math.min(nValue.length, nValue.length + 1),
+    );
+
+    return TextEditingValue(
+        text: nValue, selection: nSelection, composing: TextRange.empty);
   }
 }
