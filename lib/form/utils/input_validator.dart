@@ -29,7 +29,8 @@ class InputValidator {
       return "Invalid Amount Format";
     }
 
-    if (sameAmt == trimmedValue) {
+    if (sameAmt != null &&
+        double.parse(trimmedValue) >= double.parse(sameAmt)) {
       return "Please give amount below subtotal";
     }
 
@@ -48,11 +49,11 @@ class InputValidator {
     }
 
     if (trimmedValue.contains(RegExp(r"[A-Z]"))) {
-      return "Invalid Amount Format";
+      return "Invalid Percent Format";
     }
 
     if (trimmedValue == '100' || double.parse(trimmedValue) >= 90) {
-      return "Please give amount below ${requiredText ?? "subtotal"}";
+      return "Please give percent below subtotal";
     }
 
     return null;

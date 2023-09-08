@@ -144,8 +144,8 @@ class CurrencyInputFormatter extends TextInputFormatter {
   }
 }
 
-class PercentageNumberFormatter extends TextInputFormatter {
-  PercentageNumberFormatter({this.decimalRange = 2});
+class PercentageNumbersFormatter extends TextInputFormatter {
+  PercentageNumbersFormatter({this.decimalRange = 2});
 
   final int decimalRange;
 
@@ -161,17 +161,20 @@ class PercentageNumberFormatter extends TextInputFormatter {
         .map<String>((Match match) => match.group(0)!)
         .join();
 
+    final oldText = oldValue.text.replaceAll('%', '').trim();
     if (nValue.startsWith('.')) {
       nValue = '0.';
     } else if (nValue.contains('.')) {
       if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
-        nValue = oldValue.text;
+        nValue = oldText;
       } else {
         if (nValue.split('.').length > 2) {
           List<String> split = nValue.split('.');
-          nValue = split[0] + '.' + split[1];
+          nValue = '${split[0]}.${split[1]}';
         }
       }
+    } else if (nValue.length > 2) {
+      nValue = oldText;
     }
 
     nSelection = newValue.selection.copyWith(
@@ -180,8 +183,6 @@ class PercentageNumberFormatter extends TextInputFormatter {
     );
 
     return TextEditingValue(
-        text: nValue.isNotEmpty ? '$nValue%' : nValue,
-        selection: nSelection,
-        composing: TextRange.empty);
+        text: '$nValue%', selection: nSelection, composing: TextRange.empty);
   }
 }
