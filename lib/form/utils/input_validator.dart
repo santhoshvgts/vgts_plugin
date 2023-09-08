@@ -14,13 +14,13 @@ class InputValidator {
   }
 
   static String? amountValidator(String? value,
-      {String? requiredText, String? sameAmt}) {
+      {String? requiredText, String? sameAmt, String symbol = "-₹"}) {
     if (value?.trim().isEmpty != false) {
       return requiredText ?? "Required !";
     }
 
     String trimmedValue =
-        value?.trim().replaceAll(",", "").replaceAll("₹", "") ?? '';
+        value?.trim().replaceAll(",", "").replaceAll(symbol, "") ?? '';
     if (trimmedValue.isEmpty) {
       return requiredText ?? "Required !";
     }
