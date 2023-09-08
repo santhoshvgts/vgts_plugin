@@ -52,7 +52,7 @@ class InputValidator {
     }
 
     if (trimmedValue == '100' || double.parse(trimmedValue) >= 90) {
-      return "Please give amount below subtotal";
+      return "Please give amount below ${requiredText ?? "subtotal"}";
     }
 
     return null;
