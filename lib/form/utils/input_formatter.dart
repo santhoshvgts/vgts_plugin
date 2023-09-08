@@ -119,7 +119,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
       name: "INR",
       locale: 'en_IN',
       decimalDigits: 0,
-      symbol: !isSubtract ? '-₹' : '₹',
+      symbol: !isSubtract ? '₹' : '-₹',
     );
 
     String newValueText = '';
