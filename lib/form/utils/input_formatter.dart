@@ -180,6 +180,6 @@ class PercentageNumberFormatter extends TextInputFormatter {
     );
 
     return TextEditingValue(
-        text: nValue, selection: nSelection, composing: TextRange.empty);
+        text: '$nValue%', selection: nSelection, composing: TextRange.empty);
   }
 }
