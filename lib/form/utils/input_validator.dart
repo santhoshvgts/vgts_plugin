@@ -51,7 +51,7 @@ class InputValidator {
       return "Invalid Amount Format";
     }
 
-    if (trimmedValue == '100') {
+    if (trimmedValue == '100' || double.parse(trimmedValue) >= 90) {
       return "Please give amount below subtotal";
     }
 
