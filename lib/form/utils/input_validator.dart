@@ -14,7 +14,7 @@ class InputValidator {
   }
 
   static String? amountValidator(String? value,
-      {String? requiredText, String? sameAmt, String symbol = "-₹"}) {
+      {String? requiredText, String? sameAmt, String symbol = "₹"}) {
     if (value?.trim().isEmpty != false) {
       return requiredText ?? "Required !";
     }
