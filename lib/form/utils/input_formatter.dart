@@ -113,7 +113,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
       return oldValue;
     }
 
-    final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9].'), '');
 
     NumberFormat formatter = NumberFormat.currency(
       name: "INR",
