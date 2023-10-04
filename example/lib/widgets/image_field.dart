@@ -1,10 +1,9 @@
-import 'dart:convert';
-import 'dart:typed_data';
+import 'dart:io';
 
 import 'package:flutter/material.dart';
-import 'package:flutter_image_compress/flutter_image_compress.dart';
-import 'package:image_picker/image_picker.dart';
 import 'package:vgts_plugin/form/utils/form_field_controller.dart';
+import 'package:vgts_plugin/services/image_picker_services.dart';
+import 'package:vgts_plugin/vgts_plugin.dart';
 import 'package:vgts_plugin_example/res/colors.dart';
 import 'package:vgts_plugin_example/res/fontsize.dart';
 import 'package:vgts_plugin_example/res/images.dart';
@@ -42,8 +41,8 @@ class ImageField extends StatefulWidget {
 
   ImageField(this.controller,
       {this.margin = EdgeInsets.zero,
-      this.height = 104,
-      this.width = 104,
+      this.height = 200,
+      this.width = 200,
       this.placeholder = Images.emptyProfile});
 
   @override
@@ -51,8 +50,6 @@ class ImageField extends StatefulWidget {
 }
 
 class _ImageFieldState extends State<ImageField> {
-  final ImagePicker _picker = ImagePicker();
-
   final BorderRadius _borderRadius = BorderRadius.circular(12.0);
 
   @override
@@ -66,26 +63,13 @@ class _ImageFieldState extends State<ImageField> {
             children: [
               InkWell(
                 onTap: () async {
-                  ImageSource? imageSource = await showDialog<ImageSource>(
-                      context: context,
-                      builder: (context) => _PickImageOption());
-                  if (imageSource == null) return;
-
-                  final image = await _picker.pickImage(
-                      source: imageSource, imageQuality: 50);
-                  if (image == null) return;
-
-                  Uint8List? result =
-                      await FlutterImageCompress.compressWithFile(
-                    image.path,
-                    minWidth: 500,
-                    minHeight: 500,
-                    quality: 94,
-                  );
-
-                  setState(() {
-                    widget.controller.setValue(base64Encode(result!));
-                  });
+                  final picker = getIt<ImagePickerService>();
+                  final images = await picker.pickImage(context);
+                  if (images?.isNotEmpty == true) {
+                    setState(() {
+                      widget.controller.setValue(images!.first);
+                    });
+                  }
                 },
                 child: Container(
                   decoration: BoxDecoration(
@@ -93,12 +77,13 @@ class _ImageFieldState extends State<ImageField> {
                       border: Border.all(
                           color: state.hasError ? _errorColor : _focusBgColor,
                           width: 2)),
-                  height: widget.height,
-                  width: widget.width,
                   child: ClipRRect(
                       borderRadius: _borderRadius,
                       child: widget.controller.value == null
-                          ? Image.asset(widget.placeholder)
+                          ? Icon(
+                              Icons.image,
+                              size: 200,
+                            )
                           : _ImageView(widget.controller.value!)),
                 ),
               ),
@@ -115,78 +100,24 @@ class _ImageFieldState extends State<ImageField> {
         },
         validator: (value) =>
             widget.controller.validator(widget.controller.value),
-        initialValue: widget.controller.value,
+        initialValue: widget.controller.value?.path,
       ),
     );
   }
 }
 
 class _ImageView extends StatelessWidget {
-  final String image;
+  final File file;
 
-  _ImageView(this.image);
+  _ImageView(this.file);
 
   @override
   Widget build(BuildContext context) {
-    return Image.memory(
-      base64Decode(image),
-      width: double.infinity,
-      height: double.infinity,
+    return Image.file(
+      file,
       fit: BoxFit.cover,
-    );
-  }
-}
-
-class _PickImageOption extends StatelessWidget {
-  @override
-  Widget build(BuildContext context) {
-    return AlertDialog(
-      title: Text(
-        "Select Image Pick Option",
-        textScaleFactor: 1,
-        style: _labelTextStyle,
-      ),
-      titlePadding: EdgeInsets.symmetric(vertical: 15, horizontal: 15),
-      contentPadding: EdgeInsets.zero,
-      content: Wrap(
-        children: [
-          Column(
-            children: [
-              SizedBox(
-                  width: double.infinity,
-                  child: MaterialButton(
-                    onPressed: () {
-                      Navigator.pop(context, ImageSource.camera);
-                    },
-                    child: Text(
-                      "Camera",
-                      textScaleFactor: 1,
-                      style: _bodyTextStyle,
-                    ),
-                  )),
-              SizedBox(
-                  width: double.infinity,
-                  child: MaterialButton(
-                    onPressed: () {
-                      Navigator.pop(context, ImageSource.gallery);
-                    },
-                    child: Text(
-                      "Gallery",
-                      textScaleFactor: 1,
-                      style: _bodyTextStyle,
-                    ),
-                  )),
-            ],
-          ),
-        ],
-      ),
-      actions: [
-        MaterialButton(
-            onPressed: () {
-              Navigator.pop(context);
-            },
-            child: Text("Close"))
-      ],
+      cacheWidth: 200,
+      cacheHeight: 200,
     );
   }
 }

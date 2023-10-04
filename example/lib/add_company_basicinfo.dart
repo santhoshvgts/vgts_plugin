@@ -1,16 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
 import 'package:vgts_plugin/vgts_plugin.dart';
-import 'package:vgts_plugin_example/create_company_viewmodel.dart';
 import 'package:vgts_plugin_example/currency.dart';
 import 'package:vgts_plugin_example/res/colors.dart';
 import 'package:vgts_plugin_example/res/styles.dart';
+import 'package:vgts_plugin_example/widgets/image_field.dart';
 import 'package:vgts_plugin_example/widgets/dropdown_field.dart';
 import 'package:vgts_plugin_example/widgets/edit_text_field.dart';
-import 'package:vgts_plugin_example/widgets/image_field.dart';
+import 'package:vgts_plugin_example/create_company_viewmodel.dart';
 
-class CompanyBasicInfoPage
-    extends ViewModelBuilderWidget<CreateCompanyViewModel> {
+class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
   @override
   Widget builder(
       BuildContext context, CreateCompanyViewModel viewModel, Widget? child) {

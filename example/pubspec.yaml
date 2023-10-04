@@ -11,7 +11,7 @@ environment:
 dependencies:
   flutter:
     sdk: flutter
-  stacked: ^2.1.8
+  stacked: ^3.4.1+1
 
   vgts_plugin:
     # When depending on this package from a real application you should use:
