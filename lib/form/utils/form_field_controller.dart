@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
@@ -555,16 +557,16 @@ class MultiSelectionFieldController<T extends BaseObject> {
 class ImageFieldController {
   Key fieldKey;
   FocusNode focusNode = new FocusNode();
-  String? value;
+  File? value;
   bool required;
 
   ImageFieldController(this.fieldKey, {this.value, this.required = true});
 
-  setValue(String value) {
+  setValue(File value) {
     this.value = value;
   }
 
-  String? validator(String? value) {
+  String? validator(File? value) {
     if (required && value == null) return "Required !";
 
     return null;
