@@ -15,29 +15,36 @@ class ImagePickerService {
 
   Future<List<File>?> pickImage(BuildContext context,
       {bool cropImage = false,
+      bool isCompressed = true,
       bool isMultiPicker = false,
       bool isWaterMater = true,
       String? waterMarkText}) async {
-    ImageSource? imageSource = await showCupertinoModalPopup(
-        context: context,
-        builder: (context) {
-          return ChooseImageWidget();
-        });
+    ImageSource? imageSource;
+    if (isMultiPicker) {
+      imageSource = await showCupertinoModalPopup(
+          context: context,
+          builder: (context) {
+            return ChooseImageWidget();
+          });
+    }
 
-    if (imageSource == null) return [];
+    if (!isMultiPicker && imageSource == null) return [];
 
     List<XFile?> selectedFile = isMultiPicker
         ? await _picker.pickMultiImage(imageQuality: 50)
-        : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
+        : [await _picker.pickImage(source: imageSource!, imageQuality: 50)];
 
     if (selectedFile.isEmpty) return [];
 
-    List<File> files = [];
+    List<File> files =
+        isCompressed ? [] : selectedFile.map((e) => File(e!.path)).toList();
 
-    for (final e in selectedFile) {
-      final file = File(e!.path);
-      final compressed = await _compressImage(file);
-      if (compressed != null) files.add(File(compressed.path));
+    if (isCompressed) {
+      for (final e in selectedFile) {
+        final file = File(e!.path);
+        final compressed = await _compressImage(file);
+        if (compressed != null) files.add(File(compressed.path));
+      }
     }
 
     List<File> waterMarkFiles = [];
@@ -50,6 +57,7 @@ class ImagePickerService {
       }
       files = waterMarkFiles;
     }
+
     return files;
   }
 
@@ -57,7 +65,7 @@ class ImagePickerService {
     final dir = await getTemporaryDirectory();
     return await FlutterImageCompress.compressAndGetFile(
         filePath!.absolute.path, dir.absolute.path + '/temp.jpg',
-        minWidth: 500, minHeight: 500, quality: 94);
+        minWidth: 500, minHeight: 500, quality: 90);
   }
 
   Future<File?> imageCropper(File? selectedFile) async {
