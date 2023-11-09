@@ -1,5 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+import 'package:vgts_plugin/form/utils/input_formatter.dart';
+import 'package:vgts_plugin/form/utils/input_validator.dart';
 import 'package:vgts_plugin/vgts_plugin.dart';
 import 'package:vgts_plugin_example/currency.dart';
 import 'package:vgts_plugin_example/res/colors.dart';
@@ -46,6 +48,32 @@ class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
                           viewModel.itemImageController,
                           margin: EdgeInsets.only(top: 20),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(hintText: 'Percentage'),
+                            inputFormatters: [PercentageNumbersFormatter()],
+                            validator: (value) =>
+                                InputValidator.percentageValidator(value,
+                                    isDisccount: true, isOptional: false),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(hintText: 'Amount'),
+                            inputFormatters: [AmountInputFormatter()],
+                            validator: (value) =>
+                                InputValidator.amountValidator(value,
+                                    price: '100.00', isOptional: false),
+                          ),
+                        ),
                         EditTextField(
                           "Amount",
                           viewModel.amountController,
@@ -58,7 +86,7 @@ class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
                           "Percent",
                           viewModel.percentageNumberController,
                           placeholder: "Enter Percent Number",
-                          //  margin: EdgeInsets.only(top: 15.0),
+                          margin: const EdgeInsets.symmetric(vertical: 12.0),
                           onChanged: (value) {},
                           onSubmitted: (val) {},
                         ),

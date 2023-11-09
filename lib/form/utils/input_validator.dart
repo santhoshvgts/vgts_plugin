@@ -14,37 +14,53 @@ class InputValidator {
   }
 
   static String? amountValidator(String? value,
-      {String? requiredText, String? sameAmt, String symbol = "₹"}) {
+      {String? requiredText,
+      bool? isOptional = true,
+      String? price,
+      String symbol = "₹"}) {
     if (value?.trim().isEmpty != false) {
       return requiredText ?? "Required !";
     }
 
     String trimmedValue =
         value?.trim().replaceAll(",", "").replaceAll(symbol, "") ?? '';
-    if (trimmedValue.isEmpty) {
+    if (isOptional == true && trimmedValue.isEmpty) {
       return requiredText ?? "Required !";
     }
 
-    if (trimmedValue.contains(RegExp(r"[A-Z]"))) {
+    if (isOptional == true && trimmedValue.contains(RegExp(r"[A-Z]"))) {
       return "Invalid Amount Format";
+    }
+
+    final inputPrice = double.parse(trimmedValue.isEmpty ? '0' : trimmedValue);
+    final formatPrice = double.parse(price ?? '0');
+    if (inputPrice >= formatPrice) {
+      return requiredText ?? 'Discount amount should be less than price';
     }
 
     return null;
   }
 
-  static String? percentageValidator(String? value, {String? requiredText}) {
+  static String? percentageValidator(String? value,
+      {String? requiredText, bool? isDisccount, bool? isOptional = true}) {
     if (value?.trim().isEmpty != false) {
       return requiredText ?? "Required !";
     }
 
     String trimmedValue =
         value?.trim().replaceAll(",", "").replaceAll("%", "") ?? '';
-    if (trimmedValue.isEmpty) {
+    if (isOptional == true && trimmedValue.isEmpty) {
       return requiredText ?? "Required !";
     }
 
-    if (trimmedValue.contains(RegExp(r"[A-Z]"))) {
+    if (isOptional == true && trimmedValue.contains(RegExp(r"[A-Z]"))) {
       return "Invalid Percent Format";
+    }
+
+    if (isDisccount == true &&
+        trimmedValue.isNotEmpty &&
+        double.parse(trimmedValue) >= 100) {
+      return requiredText ?? 'Discount amount should be less than price';
     }
 
     return null;

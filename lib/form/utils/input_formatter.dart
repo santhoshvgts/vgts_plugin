@@ -1,7 +1,6 @@
 import 'package:flutter/services.dart';
-import 'package:intl/intl.dart';
 
-import 'dart:math' as math;
+import '../../constants/vgts_constant.dart';
 
 class InputFormatter {
   static List<TextInputFormatter> phoneNoFormatter = [
@@ -112,15 +111,9 @@ class CurrencyInputFormatter extends TextInputFormatter {
     if (newValue.selection.baseOffset > maxDigits) {
       return oldValue;
     }
-
+    final formatter = VgtsConstant.currencyFormatter(
+        decimalDigits: 0, isSubtract: isSubtract);
     final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9].'), '');
-
-    NumberFormat formatter = NumberFormat.currency(
-      name: "INR",
-      locale: 'en_IN',
-      decimalDigits: 0,
-      symbol: !isSubtract ? '₹' : '-₹',
-    );
 
     String newValueText = '';
     try {
@@ -144,6 +137,44 @@ class CurrencyInputFormatter extends TextInputFormatter {
   }
 }
 
+class AmountInputFormatter extends TextInputFormatter {
+  AmountInputFormatter({this.decimalRange = 2});
+  final int decimalRange;
+
+  @override
+  TextEditingValue formatEditUpdate(
+      TextEditingValue oldValue, TextEditingValue newValue) {
+    String nValue = newValue.text;
+    TextSelection nSelection = newValue.selection;
+
+    Pattern p = RegExp(r'(\d+\.?)|(\.?\d+)|(\.?)');
+    nValue = p
+        .allMatches(nValue)
+        .map<String>((Match match) => match.group(0)!)
+        .join();
+
+    final oldText =
+        oldValue.text.replaceAll(",", "").replaceAll('₹', "").trim();
+    final splitValue = nValue.split('.');
+    if (nValue.startsWith('.')) {
+      nValue = splitValue.last.isNotEmpty ? '.${splitValue.last}' : '0.';
+    } else if (nValue.contains('.')) {
+      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+        nValue = oldText;
+      } else {
+        if (splitValue.length > 2) {
+          nValue = '${splitValue[0]}.${splitValue[1]}';
+        }
+      }
+    }
+
+    nSelection = newValue.selection
+        .copyWith(baseOffset: nSelection.start, extentOffset: nSelection.end);
+    print('₹$nValue'.length);
+    return TextEditingValue(text: '₹$nValue', composing: TextRange.empty);
+  }
+}
+
 class PercentageNumbersFormatter extends TextInputFormatter {
   PercentageNumbersFormatter({this.decimalRange = 2});
 
@@ -162,25 +193,27 @@ class PercentageNumbersFormatter extends TextInputFormatter {
         .join();
 
     final oldText = oldValue.text.replaceAll('%', '').trim();
+    final splitValue = nValue.split('.');
     if (nValue.startsWith('.')) {
-      nValue = '0.';
+      nValue = splitValue.last.isNotEmpty ? '.${splitValue.last}' : '0.';
     } else if (nValue.contains('.')) {
+      if (splitValue.first.length > 3) {
+        nValue = oldText;
+      }
       if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
         nValue = oldText;
       } else {
-        if (nValue.split('.').length > 2) {
-          List<String> split = nValue.split('.');
-          nValue = '${split[0]}.${split[1]}';
+        if (splitValue.length > 2) {
+          nValue = '${splitValue[0]}.${splitValue[1]}';
         }
       }
-    } else if (nValue.length > 2) {
+    } else if (nValue.length > 3) {
       nValue = oldText;
     }
 
     nSelection = newValue.selection.copyWith(
-      baseOffset: math.min(nValue.length, nValue.length + 1),
-      extentOffset: math.min(nValue.length, nValue.length + 1),
-    );
+        baseOffset: nSelection.baseOffset,
+        extentOffset: nSelection.extentOffset);
 
     return TextEditingValue(
         text: '$nValue%', selection: nSelection, composing: TextRange.empty);

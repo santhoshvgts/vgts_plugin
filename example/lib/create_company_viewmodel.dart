@@ -20,9 +20,10 @@ class CreateCompanyViewModel extends BaseViewModel {
 
   FormFieldController percentageNumberController = FormFieldController(
       ValueKey("percentage"),
+      textInputType: TextInputType.number,
       inputFormatter: [PercentageNumbersFormatter()], validator: (p1) {
     return InputValidator.percentageValidator(p1,
-        requiredText: "Required Aasdasd");
+        isDisccount: true, isOptional: false);
   });
 
   NameFormFieldController companyNameController = NameFormFieldController(
