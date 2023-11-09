@@ -166,6 +166,8 @@ class AmountInputFormatter extends TextInputFormatter {
           nValue = '${splitValue[0]}.${splitValue[1]}';
         }
       }
+    } else if (splitValue.first.length > 6) {
+      nValue = oldText;
     }
 
     nSelection = newValue.selection
