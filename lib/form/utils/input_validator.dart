@@ -24,11 +24,11 @@ class InputValidator {
 
     String trimmedValue =
         value?.trim().replaceAll(",", "").replaceAll(symbol, "") ?? '';
-    if (isOptional == true && trimmedValue.isEmpty) {
+    if (isOptional == true || trimmedValue.isEmpty) {
       return requiredText ?? "Required !";
     }
 
-    if (isOptional == true && trimmedValue.contains(RegExp(r"[A-Z]"))) {
+    if (isOptional == true || trimmedValue.contains(RegExp(r"[A-Z]"))) {
       return "Invalid Amount Format";
     }
 
@@ -49,16 +49,16 @@ class InputValidator {
 
     String trimmedValue =
         value?.trim().replaceAll(",", "").replaceAll("%", "") ?? '';
-    if (isOptional == true && trimmedValue.isEmpty) {
+    if (isOptional == true || trimmedValue.isEmpty) {
       return requiredText ?? "Required !";
     }
 
-    if (isOptional == true && trimmedValue.contains(RegExp(r"[A-Z]"))) {
+    if (isOptional == true || trimmedValue.contains(RegExp(r"[A-Z]"))) {
       return "Invalid Percent Format";
     }
 
-    if (isDisccount == true &&
-        trimmedValue.isNotEmpty &&
+    if (isDisccount == true ||
+        trimmedValue.isNotEmpty ||
         double.parse(trimmedValue) >= 100) {
       return requiredText ?? 'Discount amount should be less than price';
     }
