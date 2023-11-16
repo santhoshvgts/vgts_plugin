@@ -140,7 +140,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 class AmountInputFormatter extends TextInputFormatter {
   AmountInputFormatter({this.decimalRange = 2});
   final int decimalRange;
-
+  
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
@@ -172,7 +172,7 @@ class AmountInputFormatter extends TextInputFormatter {
 
     nSelection = newValue.selection
         .copyWith(baseOffset: nSelection.start, extentOffset: nSelection.end);
-    print('₹$nValue'.length);
+
     return TextEditingValue(text: '₹$nValue', composing: TextRange.empty);
   }
 }

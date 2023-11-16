@@ -34,7 +34,7 @@ class InputValidator {
 
     final inputPrice = double.parse(trimmedValue.isEmpty ? '0' : trimmedValue);
     final formatPrice = double.parse(price ?? '0');
-    if (inputPrice >= formatPrice) {
+    if (price != null && inputPrice >= formatPrice) {
       return requiredText ?? 'Discount amount should be less than price';
     }
 
