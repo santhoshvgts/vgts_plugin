@@ -57,8 +57,8 @@ class InputValidator {
       return "Invalid Percent Format";
     }
 
-    if (isDisccount == true ||
-        trimmedValue.isNotEmpty ||
+    if (isDisccount == true &&
+        trimmedValue.isNotEmpty &&
         double.parse(trimmedValue) >= 100) {
       return requiredText ?? 'Discount amount should be less than price';
     }
