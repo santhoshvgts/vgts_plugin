@@ -140,7 +140,7 @@ class CurrencyInputFormatter extends TextInputFormatter {
 class AmountInputFormatter extends TextInputFormatter {
   AmountInputFormatter({this.decimalRange = 2});
   final int decimalRange;
-  
+
   @override
   TextEditingValue formatEditUpdate(
       TextEditingValue oldValue, TextEditingValue newValue) {
@@ -178,9 +178,11 @@ class AmountInputFormatter extends TextInputFormatter {
 }
 
 class PercentageNumbersFormatter extends TextInputFormatter {
-  PercentageNumbersFormatter({this.decimalRange = 2});
+  PercentageNumbersFormatter(
+      {this.decimalRange = 2, this.isFullPercent = true});
 
   final int decimalRange;
+  final bool isFullPercent;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -196,21 +198,24 @@ class PercentageNumbersFormatter extends TextInputFormatter {
 
     final oldText = oldValue.text.replaceAll('%', '').trim();
     final splitValue = nValue.split('.');
+    final percentValue = VgtsConstant.percentValue(nValue);
+    final percentText = isFullPercent && percentValue >= 100 ? '100' : oldText;
+
     if (nValue.startsWith('.')) {
       nValue = splitValue.last.isNotEmpty ? '.${splitValue.last}' : '0.';
     } else if (nValue.contains('.')) {
-      if (splitValue.first.length > 3) {
-        nValue = oldText;
-      }
-      if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
+      if (splitValue.first.length >= 3) {
+        nValue = percentText;
+      } else if (nValue.substring(nValue.indexOf('.') + 1).length >
+          decimalRange) {
         nValue = oldText;
       } else {
         if (splitValue.length > 2) {
           nValue = '${splitValue[0]}.${splitValue[1]}';
         }
       }
-    } else if (nValue.length > 3) {
-      nValue = oldText;
+    } else if (nValue.length >= 3) {
+      nValue = percentText;
     }
 
     nSelection = newValue.selection.copyWith(

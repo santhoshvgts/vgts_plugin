@@ -13,4 +13,9 @@ sealed class VgtsConstant {
         symbol: isSubtract == false ? '₹' : '-₹');
     return formatter;
   }
+
+  static double percentValue(String value) {
+    final formatValue = value.replaceAll('%', '').replaceAll('.', '').trim();
+    return double.parse(formatValue.isEmpty ? '0' : formatValue);
+  }
 }
