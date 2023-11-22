@@ -16,6 +16,7 @@ class InputValidator {
   static String? amountValidator(String? value,
       {String? requiredText,
       bool? isOptional = true,
+      bool? isZeroAmt,
       String? price,
       String symbol = "₹"}) {
     if (value?.trim().isEmpty != false) {
@@ -36,6 +37,10 @@ class InputValidator {
     final formatPrice = double.parse(price ?? '0');
     if (price != null && inputPrice >= formatPrice) {
       return requiredText ?? 'Discount amount should be less than price';
+    }
+
+    if (isZeroAmt == true && inputPrice == 0) {
+      return requiredText ?? 'Price cannot be zero';
     }
 
     return null;
