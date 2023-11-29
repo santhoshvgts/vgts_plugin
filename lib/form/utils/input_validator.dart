@@ -16,7 +16,7 @@ class InputValidator {
   static String? zipCodeValidator(String? value, {String? requiredText}) {
     if (value?.trim().isEmpty != false) return requiredText ?? "Required !";
 
-    if (value!.trim().length > 6) return "Pincode must be 6 digits";
+    if (value!.trim().length != 6) return "Pincode must be 6 digits";
 
     return null;
   }
