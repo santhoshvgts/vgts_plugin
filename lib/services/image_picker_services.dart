@@ -20,13 +20,12 @@ class ImagePickerService {
       bool isWaterMater = true,
       String? waterMarkText}) async {
     ImageSource? imageSource;
-    if (isMultiPicker) {
-      imageSource = await showCupertinoModalPopup(
-          context: context,
-          builder: (context) {
-            return ChooseImageWidget();
-          });
-    }
+
+    imageSource = await showCupertinoModalPopup(
+        context: context,
+        builder: (context) {
+          return ChooseImageWidget();
+        });
 
     if (!isMultiPicker && imageSource == null) return [];
 
@@ -52,7 +51,7 @@ class ImagePickerService {
       for (final e in files) {
         final formatter = DateFormat('dd/MM/yyyy h:mm a');
         final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
-            text: waterMarkText ?? '${formatter.format(DateTime.now())}\nVGTS');
+            text: waterMarkText ?? '${formatter.format(DateTime.now())}');
         waterMarkFiles.add(waterMarkFile!);
       }
       files = waterMarkFiles;
@@ -63,9 +62,14 @@ class ImagePickerService {
 
   Future<XFile?> _compressImage(File? filePath) async {
     final dir = await getTemporaryDirectory();
+    final path = filePath?.absolute.path;
+    final isPng = path?.contains('.png');
     return await FlutterImageCompress.compressAndGetFile(
-        filePath!.absolute.path, dir.absolute.path + '/temp.jpg',
-        minWidth: 500, minHeight: 500, quality: 90);
+        path!, '${dir.absolute.path}/temp.${isPng! ? 'png' : 'jpg'}',
+        format: (isPng) ? CompressFormat.png : CompressFormat.jpeg,
+        minWidth: 500,
+        minHeight: 500,
+        quality: 90);
   }
 
   Future<File?> imageCropper(File? selectedFile) async {
