@@ -27,11 +27,11 @@ class ImagePickerService {
           return ChooseImageWidget();
         });
 
-    if (!isMultiPicker && imageSource == null) return [];
+    if (imageSource == null) return [];
 
     List<XFile?> selectedFile = isMultiPicker
         ? await _picker.pickMultiImage(imageQuality: 50)
-        : [await _picker.pickImage(source: imageSource!, imageQuality: 50)];
+        : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
 
     if (selectedFile.isEmpty) return [];
 
