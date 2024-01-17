@@ -67,7 +67,7 @@ class ImagePickerService {
     return await FlutterImageCompress.compressAndGetFile(
         path!, '${dir.absolute.path}/temp.${isPng! ? 'png' : 'jpg'}',
         format: (isPng) ? CompressFormat.png : CompressFormat.jpeg,
-        minWidth: 500,
+        minWidth: 600,
         minHeight: 500,
         quality: 90);
   }
