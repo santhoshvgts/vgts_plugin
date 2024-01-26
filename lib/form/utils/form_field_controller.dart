@@ -257,8 +257,8 @@ class AmountFormFieldController extends FormFieldController {
   String? requiredText;
   NumberCurrencyFormat? currencyFormat;
 
-  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.currencyFormat }) : super(fieldKey, required: required) {
-    this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.inr();
+  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, NumberCurrencyFormat? currencyFormat }) : super(fieldKey, required: required) {
+    this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.usd();
   }
 
   @override
