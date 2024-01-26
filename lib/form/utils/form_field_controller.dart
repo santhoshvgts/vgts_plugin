@@ -5,6 +5,7 @@ import 'package:intl/intl.dart';
 import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
+import 'package:vgts_plugin/form/utils/number_currency_format.dart';
 
 
 //  Base Form Field Controller
@@ -254,8 +255,11 @@ class NumberFormFieldController extends FormFieldController {
 class AmountFormFieldController extends FormFieldController {
 
   String? requiredText;
+  NumberCurrencyFormat? currencyFormat;
 
-  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText }) : super(fieldKey, required: required);
+  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.currencyFormat }) : super(fieldKey, required: required) {
+   this.currencyFormat = NumberCurrencyFormat.inr();
+  }
 
   @override
   String get text {
@@ -264,13 +268,13 @@ class AmountFormFieldController extends FormFieldController {
     }
 
     NumberFormat formatter = NumberFormat.currency(
-      name: "INR",
-      locale: 'en_IN',
-      decimalDigits: 0,
-      symbol: '₹',
+      name: currencyFormat!.name,
+      locale: currencyFormat!.locale,
+      decimalDigits: currencyFormat!.decimalDigits,
+      symbol: currencyFormat!.symbol,
     );
     String value = textEditingController.text.replaceAll(" ", "");
-    if (value.trim() == "₹"){
+    if (value.trim() == currencyFormat!.symbol){
       return "";
     }
     return formatter.parse(textEditingController.text).toString();
@@ -279,10 +283,10 @@ class AmountFormFieldController extends FormFieldController {
   @override
   set text(value) {
     NumberFormat formatter = NumberFormat.currency(
-      name: "INR",
-      locale: 'en_IN',
-      decimalDigits: 0,
-      symbol: '₹',
+      name: currencyFormat!.name,
+      locale: currencyFormat!.locale,
+      decimalDigits: currencyFormat!.decimalDigits,
+      symbol: currencyFormat!.symbol,
     );
     try {
       textEditingController.text = formatter.format(double.parse(value));
