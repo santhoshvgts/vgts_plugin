@@ -258,7 +258,7 @@ class AmountFormFieldController extends FormFieldController {
   NumberCurrencyFormat? currencyFormat;
 
   AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.currencyFormat }) : super(fieldKey, required: required) {
-   this.currencyFormat = NumberCurrencyFormat.inr();
+    this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.inr();
   }
 
   @override
@@ -274,7 +274,7 @@ class AmountFormFieldController extends FormFieldController {
       symbol: currencyFormat!.symbol,
     );
     String value = textEditingController.text.replaceAll(" ", "");
-    if (value.trim() == currencyFormat!.symbol){
+    if (value.trim() == currencyFormat!.symbol) {
       return "";
     }
     return formatter.parse(textEditingController.text).toString();
