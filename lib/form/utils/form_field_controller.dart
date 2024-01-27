@@ -273,6 +273,10 @@ class AmountFormFieldController extends FormFieldController {
       decimalDigits: currencyFormat!.decimalDigits,
       symbol: currencyFormat!.symbol,
     );
+
+    print(currencyFormat);
+    print(textEditingController.text);
+
     String value = textEditingController.text.replaceAll(" ", "");
     if (value.trim() == currencyFormat!.symbol) {
       return "";
@@ -288,6 +292,12 @@ class AmountFormFieldController extends FormFieldController {
       decimalDigits: currencyFormat!.decimalDigits,
       symbol: currencyFormat!.symbol,
     );
+
+    print(currencyFormat.toString());
+    print(formatter.currencySymbol);
+    print(formatter.toString());
+    print(double.parse(value));
+
     try {
       textEditingController.text = formatter.format(double.parse(value));
     } catch (ex) {
@@ -304,7 +314,7 @@ class AmountFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50) ];
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50, currencyFormat: currencyFormat) ];
 
   @override
   bool get allowPaste => false;

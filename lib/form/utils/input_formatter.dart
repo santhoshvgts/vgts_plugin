@@ -1,6 +1,7 @@
 
 import 'package:flutter/services.dart';
 import 'package:intl/intl.dart';
+import 'package:vgts_plugin/form/utils/number_currency_format.dart';
 
 class InputFormatter {
 
@@ -88,8 +89,10 @@ class MaskedTextInputFormatter extends TextInputFormatter {
 
 class CurrencyInputFormatter extends TextInputFormatter {
 
-  CurrencyInputFormatter({this.maxDigits = 10});
+  CurrencyInputFormatter({this.maxDigits = 10, this.currencyFormat});
+
   final int maxDigits;
+  final NumberCurrencyFormat? currencyFormat;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -104,10 +107,10 @@ class CurrencyInputFormatter extends TextInputFormatter {
     final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9]'), '');
 
     NumberFormat formatter = NumberFormat.currency(
-      name: "INR",
-      locale: 'en_IN',
-      decimalDigits: 0,
-      symbol: '₹',
+      name: currencyFormat?.name ?? "INR",
+      locale: currencyFormat?.locale ?? 'en_IN',
+      decimalDigits: currencyFormat?.decimalDigits ?? 0,
+      symbol: currencyFormat?.symbol ?? '₹',
     );
 
     String newValueText = '';

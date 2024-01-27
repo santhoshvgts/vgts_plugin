@@ -17,4 +17,8 @@ class NumberCurrencyFormat {
     return NumberCurrencyFormat("USD", "en-US", r"$", 0);
   }
 
+  @override
+  String toString() {
+    return 'NumberCurrencyFormat{name: $name, locale: $locale, symbol: $symbol, decimalDigits: $decimalDigits}';
+  }
 }
