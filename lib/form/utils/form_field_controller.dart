@@ -226,7 +226,7 @@ class NumberFormFieldController extends FormFieldController {
 
   String? requiredText;
 
-  NumberFormFieldController(Key fieldKey,  { bool required = false, this.requiredText }) : super(fieldKey, required: required);
+  NumberFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, int? maxLength }) : super(fieldKey, required: required, maxLength: maxLength ?? 25);
 
   @override
   String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
