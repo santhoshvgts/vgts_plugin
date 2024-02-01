@@ -274,8 +274,8 @@ class AmountFormFieldController extends FormFieldController {
       symbol: currencyFormat!.symbol,
     );
 
-    print(currencyFormat);
-    print(textEditingController.text);
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
 
     String value = textEditingController.text.replaceAll(" ", "");
     if (value.trim() == currencyFormat!.symbol) {
@@ -293,10 +293,8 @@ class AmountFormFieldController extends FormFieldController {
       symbol: currencyFormat!.symbol,
     );
 
-    print(currencyFormat.toString());
-    print(formatter.currencySymbol);
-    print(formatter.toString());
-    print(double.parse(value));
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
 
     try {
       textEditingController.text = formatter.format(double.parse(value));

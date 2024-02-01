@@ -104,7 +104,13 @@ class CurrencyInputFormatter extends TextInputFormatter {
       return oldValue;
     }
 
+    print("New Value: $newValue");
+
     final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    // final oldValueText = oldValue.text.replaceAll(RegExp(r'[0-9-]{1}[0-9]*\.?[0-9]*$'), '');
+
+    print("oldValueText: $oldValueText");
+    print(oldValueText);
 
     NumberFormat formatter = NumberFormat.currency(
       name: currencyFormat?.name ?? "INR",
@@ -113,9 +119,13 @@ class CurrencyInputFormatter extends TextInputFormatter {
       symbol: currencyFormat?.symbol ?? '₹',
     );
 
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
+
     String newValueText = '';
     try {
       newValueText = formatter.parse(newValue.text).toString();
+      print("newValueText $newValueText");
     } catch(ex) {
     }
 
@@ -127,7 +137,21 @@ class CurrencyInputFormatter extends TextInputFormatter {
     if (newValueText.isNotEmpty) {
       double value = double.parse(newValueText);
       newText = formatter.format(value);
+      if (newValue.text.endsWith('.')) {
+        newText = newText + '.';
+      } else if (newValue.text.endsWith(".0")) {
+        newText = newText + '.0';
+      }
+      // RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+      // newText = newText.replaceAll(regex, '');
+
     }
+
+
+
+
+
+    print("newText $newText");
 
     return newValue.copyWith(
         text: newText,
