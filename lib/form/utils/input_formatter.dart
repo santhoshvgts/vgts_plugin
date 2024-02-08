@@ -138,8 +138,9 @@ class CurrencyInputFormatter extends TextInputFormatter {
 }
 
 class AmountInputFormatter extends TextInputFormatter {
-  AmountInputFormatter({this.decimalRange = 2});
+  AmountInputFormatter({this.decimalRange = 2, this.maxDigits = 6});
   final int decimalRange;
+  final int? maxDigits;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -166,7 +167,7 @@ class AmountInputFormatter extends TextInputFormatter {
           nValue = '${splitValue[0]}.${splitValue[1]}';
         }
       }
-    } else if (splitValue.first.length > 6) {
+    } else if (maxDigits != null && splitValue.first.length > maxDigits!) {
       nValue = oldText;
     }
 
