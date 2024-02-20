@@ -9,11 +9,14 @@ sealed class AddTextWaterMark {
 
   static Future<File>? addTextWaterMark(File? image, {String? text}) async {
     final originalImage = img.decodeImage(image!.readAsBytesSync());
-    img.drawString(originalImage!, text!,
-        font: img.arial24,
-        color: originalImage.getColor(163, 162, 162),
-        x: originalImage.width - 200,
-        y: originalImage.height - 60);
+    img.drawString(
+      originalImage!,
+      text!,
+      font: img.arial24,
+      x: originalImage.width - 235,
+      y: originalImage.height - 60,
+      color: originalImage.getColor(163, 162, 162),
+    );
     final tempDir = await getTemporaryDirectory();
     final _random = Random();
     String randomFileName = _random.nextInt(10000).toString();
