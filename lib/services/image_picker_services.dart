@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
 import 'package:image_picker/image_picker.dart';
@@ -33,7 +34,12 @@ class ImagePickerService {
         ? await _picker.pickMultiImage(imageQuality: 50)
         : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
 
-    if (selectedFile.isEmpty) return [];
+    showLoadingIndicator(context);
+
+    if (selectedFile.isEmpty) {
+      Navigator.pop(context);
+      return [];
+    }
 
     List<File> files =
         isCompressed ? [] : selectedFile.map((e) => File(e!.path)).toList();
@@ -57,6 +63,7 @@ class ImagePickerService {
       files = waterMarkFiles;
     }
 
+    Navigator.pop(context);
     return files;
   }
 
@@ -80,5 +87,33 @@ class ImagePickerService {
     );
     if (croppedFile == null) return null;
     return File(croppedFile.path);
+  }
+
+  void showLoadingIndicator(BuildContext context) async {
+    showDialog(
+        barrierDismissible: false,
+        context: context,
+        builder: (_) {
+          return Dialog(
+            backgroundColor: Colors.white,
+            child: Padding(
+              padding: const EdgeInsets.symmetric(vertical: 10),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                children: [
+                  Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: 25.0),
+                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                  ),
+                  Text('Loading...',
+                      style: TextStyle(
+                          fontSize: 15,
+                          fontWeight: FontWeight.w400,
+                          color: Colors.black)),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
