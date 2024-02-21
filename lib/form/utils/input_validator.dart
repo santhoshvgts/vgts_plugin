@@ -48,7 +48,8 @@ class InputValidator {
     if (price != null) {
       if (isEqualTo == true && inputPrice > formatPrice)
         return greaterThanText ?? requiredText;
-      if (inputPrice >= formatPrice) return greaterThanText ?? requiredText;
+      else if (isEqualTo == false && inputPrice >= formatPrice)
+        return greaterThanText ?? requiredText;
     }
 
     if (isZeroAmt == true && inputPrice == 0) {
