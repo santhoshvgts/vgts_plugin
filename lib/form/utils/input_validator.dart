@@ -26,6 +26,7 @@ class InputValidator {
       bool? isOptional = true,
       bool? isZeroAmt,
       String? price,
+      bool? isEqualTo,
       String symbol = "₹"}) {
     if (value?.trim().isEmpty != false) {
       return requiredText ?? "Required !";
@@ -43,8 +44,11 @@ class InputValidator {
 
     final inputPrice = double.parse(trimmedValue.isEmpty ? '0' : trimmedValue);
     final formatPrice = double.parse(price ?? '0');
-    if (price != null && inputPrice >= formatPrice) {
-      return requiredText ?? 'Discount amount should be less than price';
+    if (price != null) {
+      if (isEqualTo == true && inputPrice > formatPrice)
+        return requiredText ?? 'Discount amount should be less than price';
+      if (inputPrice >= formatPrice)
+        return requiredText ?? 'Discount amount should be less than price';
     }
 
     if (isZeroAmt == true && inputPrice == 0) {

@@ -19,9 +19,7 @@ class FormFieldController {
   TextCapitalization textCapitalization = TextCapitalization.none;
 
   String? Function(String?)? validator =
-      (String? p1) => InputValidator.emptyValidator(
-            p1,
-          );
+      (String? p1) => InputValidator.emptyValidator(p1);
   List<TextInputFormatter> inputFormatter = InputFormatter.defaultFormatter;
 
   TextInputType textInputType;
