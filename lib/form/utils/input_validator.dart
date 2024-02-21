@@ -23,6 +23,7 @@ class InputValidator {
 
   static String? amountValidator(String? value,
       {String? requiredText,
+      String? greaterThanText,
       bool? isOptional = true,
       bool? isZeroAmt,
       String? price,
@@ -46,9 +47,8 @@ class InputValidator {
     final formatPrice = double.parse(price ?? '0');
     if (price != null) {
       if (isEqualTo == true && inputPrice > formatPrice)
-        return requiredText ?? 'Discount amount should be less than price';
-      if (inputPrice >= formatPrice)
-        return requiredText ?? 'Discount amount should be less than price';
+        return greaterThanText ?? requiredText;
+      if (inputPrice >= formatPrice) return greaterThanText ?? requiredText;
     }
 
     if (isZeroAmt == true && inputPrice == 0) {

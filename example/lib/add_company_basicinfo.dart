@@ -74,6 +74,7 @@ class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
                             validator: (value) =>
                                 InputValidator.amountValidator(value,
                                     price: '100.00',
+                                    isEqualTo: true,
                                     isOptional: false,
                                     isZeroAmt: true),
                           ),
