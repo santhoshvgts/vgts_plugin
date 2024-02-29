@@ -80,6 +80,16 @@ class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
                                     isZeroAmt: true),
                           ),
                         ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(hintText: 'Name'),
+                            inputFormatters: [NoLeadingSpaceFormatter()],
+                          ),
+                        ),
                         EditTextField(
                           "Amount",
                           viewModel.amountController,

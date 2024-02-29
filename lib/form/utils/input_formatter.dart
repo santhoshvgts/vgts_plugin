@@ -227,3 +227,25 @@ class PercentageNumbersFormatter extends TextInputFormatter {
         text: '$nValue%', selection: nSelection, composing: TextRange.empty);
   }
 }
+
+class NoLeadingSpaceFormatter extends TextInputFormatter {
+  @override
+  TextEditingValue formatEditUpdate(
+    TextEditingValue oldValue,
+    TextEditingValue newValue,
+  ) {
+    if (newValue.text.startsWith(' ') || newValue.text.endsWith(' ')) {
+      final String trimedText = newValue.text.trim();
+      print('trimedText $trimedText');
+      return TextEditingValue(
+        text: trimedText,
+        selection: TextSelection(
+          baseOffset: trimedText.length,
+          extentOffset: trimedText.length,
+        ),
+      );
+    }
+
+    return newValue;
+  }
+}

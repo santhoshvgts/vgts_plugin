@@ -80,9 +80,12 @@ class ImagePickerService {
   }
 
   Future<File?> imageCropper(File? selectedFile) async {
+    final path = selectedFile?.absolute.path;
+    final isPng = path?.contains('.png');
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: selectedFile!.path,
-      compressFormat: ImageCompressFormat.jpg,
+      compressFormat:
+          (isPng == true) ? ImageCompressFormat.png : ImageCompressFormat.jpg,
       compressQuality: 100,
     );
     if (croppedFile == null) return null;
@@ -97,13 +100,13 @@ class ImagePickerService {
           return Dialog(
             backgroundColor: Colors.white,
             child: Padding(
-              padding: const EdgeInsets.symmetric(vertical: 10),
+              padding: const EdgeInsets.symmetric(vertical: 20),
               child: Row(
                 mainAxisSize: MainAxisSize.min,
                 children: [
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: 25.0),
-                    child: CircularProgressIndicator(strokeWidth: 2.5),
+                    child: CupertinoActivityIndicator(),
                   ),
                   Text('Loading...',
                       style: TextStyle(
