@@ -34,12 +34,13 @@ class ImagePickerService {
         ? await _picker.pickMultiImage(imageQuality: 50)
         : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
 
-    showLoadingIndicator(context);
-
-    if (selectedFile.isEmpty) {
+    if (selectedFile.isEmpty ||
+        selectedFile.where((n) => n == null).isNotEmpty) {
       Navigator.pop(context);
       return [];
     }
+
+    showLoadingIndicator(context);
 
     List<File> files =
         isCompressed ? [] : selectedFile.map((e) => File(e!.path)).toList();

@@ -234,9 +234,18 @@ class NoLeadingSpaceFormatter extends TextInputFormatter {
     TextEditingValue oldValue,
     TextEditingValue newValue,
   ) {
-    if (newValue.text.startsWith(' ') || newValue.text.endsWith(' ')) {
-      final String trimedText = newValue.text.trim();
-      print('trimedText $trimedText');
+    if (newValue.text.endsWith(' ') && newValue.text.length != 1) {
+      final String trimedText = '${newValue.text.trim()} ';
+      return TextEditingValue(
+        text: trimedText,
+        selection: TextSelection(
+          baseOffset: trimedText.length,
+          extentOffset: trimedText.length,
+        ),
+      );
+    }
+    if (newValue.text.startsWith(' ')) {
+      final String trimedText = newValue.text.trimLeft();
       return TextEditingValue(
         text: trimedText,
         selection: TextSelection(
