@@ -67,7 +67,9 @@ class ImagePickerService {
 
       Navigator.pop(context);
       return files;
-    } catch (e) {}
+    } catch (e) {
+      return null;
+    }
   }
 
   Future<XFile?> _compressImage(File? filePath) async {
