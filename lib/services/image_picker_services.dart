@@ -20,52 +20,54 @@ class ImagePickerService {
       bool isMultiPicker = false,
       bool isWaterMater = true,
       String? waterMarkText}) async {
-    ImageSource? imageSource;
+    try {
+      ImageSource? imageSource;
 
-    imageSource = await showCupertinoModalPopup(
-        context: context,
-        builder: (context) {
-          return ChooseImageWidget();
-        });
+      imageSource = await showCupertinoModalPopup(
+          context: context,
+          builder: (context) {
+            return ChooseImageWidget();
+          });
 
-    if (imageSource == null) return [];
+      if (imageSource == null) return [];
 
-    List<XFile?> selectedFile = isMultiPicker
-        ? await _picker.pickMultiImage(imageQuality: 50)
-        : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
+      List<XFile?> selectedFile = isMultiPicker
+          ? await _picker.pickMultiImage(imageQuality: 50)
+          : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
 
-    if (selectedFile.isEmpty ||
-        selectedFile.where((n) => n == null).isNotEmpty) {
+      if (selectedFile.isEmpty ||
+          selectedFile.where((n) => n == null).isNotEmpty) {
+        Navigator.pop(context);
+        return [];
+      }
+
+      showLoadingIndicator(context);
+
+      List<File> files =
+          isCompressed ? [] : selectedFile.map((e) => File(e!.path)).toList();
+
+      if (isCompressed) {
+        for (final e in selectedFile) {
+          final file = File(e!.path);
+          final compressed = await _compressImage(file);
+          if (compressed != null) files.add(File(compressed.path));
+        }
+      }
+
+      List<File> waterMarkFiles = [];
+      if (isWaterMater && files.isNotEmpty == true) {
+        for (final e in files) {
+          final formatter = DateFormat('dd/MM/yyyy h:mm a');
+          final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
+              text: waterMarkText ?? '${formatter.format(DateTime.now())}');
+          waterMarkFiles.add(waterMarkFile!);
+        }
+        files = waterMarkFiles;
+      }
+
       Navigator.pop(context);
-      return [];
-    }
-
-    showLoadingIndicator(context);
-
-    List<File> files =
-        isCompressed ? [] : selectedFile.map((e) => File(e!.path)).toList();
-
-    if (isCompressed) {
-      for (final e in selectedFile) {
-        final file = File(e!.path);
-        final compressed = await _compressImage(file);
-        if (compressed != null) files.add(File(compressed.path));
-      }
-    }
-
-    List<File> waterMarkFiles = [];
-    if (isWaterMater && files.isNotEmpty == true) {
-      for (final e in files) {
-        final formatter = DateFormat('dd/MM/yyyy h:mm a');
-        final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
-            text: waterMarkText ?? '${formatter.format(DateTime.now())}');
-        waterMarkFiles.add(waterMarkFile!);
-      }
-      files = waterMarkFiles;
-    }
-
-    Navigator.pop(context);
-    return files;
+      return files;
+    } catch (e) {}
   }
 
   Future<XFile?> _compressImage(File? filePath) async {
