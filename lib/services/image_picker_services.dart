@@ -37,7 +37,6 @@ class ImagePickerService {
 
       if (selectedFile.isEmpty ||
           selectedFile.where((n) => n == null).isNotEmpty) {
-        Navigator.pop(context);
         return [];
       }
 
