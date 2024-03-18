@@ -256,9 +256,9 @@ class AmountFormFieldController extends FormFieldController {
 
   String? requiredText;
   NumberCurrencyFormat? currencyFormat;
-  int? maxChar;
+  int? maxLength;
 
-  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.maxChar, NumberCurrencyFormat? currencyFormat }) : super(fieldKey, required: required) {
+  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.maxLength, NumberCurrencyFormat? currencyFormat }) : super(fieldKey, required: required) {
     this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.usd();
   }
 
@@ -313,7 +313,7 @@ class AmountFormFieldController extends FormFieldController {
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50, currencyFormat: currencyFormat) , LengthLimitingTextInputFormatter(maxChar ?? 15)];
+  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50, currencyFormat: currencyFormat) , LengthLimitingTextInputFormatter(maxLength ?? 20)];
 
   @override
   bool get allowPaste => false;
