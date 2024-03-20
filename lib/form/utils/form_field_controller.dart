@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import 'package:vgts_plugin/form/base_object.dart';
 import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
+import 'package:vgts_plugin/form/utils/number_currency_format.dart';
 
 //  Base Form Field Controller
 //  This controller will be used as Parent class for pre templated form field
@@ -231,8 +232,8 @@ class NumberFormFieldController extends FormFieldController {
   String? requiredText;
 
   NumberFormFieldController(Key fieldKey,
-      {bool required = false, this.requiredText})
-      : super(fieldKey, required: required);
+      {bool required = false, this.requiredText, int? maxLength})
+      : super(fieldKey, required: required, maxLength: maxLength ?? 25);
 
   @override
   String? Function(String? p1)? get validator => !this.required
@@ -264,10 +265,17 @@ class NumberFormFieldController extends FormFieldController {
 
 class AmountFormFieldController extends FormFieldController {
   String? requiredText;
+  NumberCurrencyFormat? currencyFormat;
+  int maxLength;
 
   AmountFormFieldController(Key fieldKey,
-      {bool required = false, this.requiredText})
-      : super(fieldKey, required: required);
+      {bool required = false,
+      this.requiredText,
+      this.maxLength = 20,
+      NumberCurrencyFormat? currencyFormat})
+      : super(fieldKey, required: required) {
+    this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.usd();
+  }
 
   @override
   String get text {
@@ -276,13 +284,17 @@ class AmountFormFieldController extends FormFieldController {
     }
 
     NumberFormat formatter = NumberFormat.currency(
-      name: "INR",
-      locale: 'en_IN',
-      decimalDigits: 0,
-      symbol: '₹',
+      name: currencyFormat!.name,
+      locale: currencyFormat!.locale,
+      decimalDigits: currencyFormat!.decimalDigits,
+      symbol: currencyFormat!.symbol,
     );
+
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
+
     String value = textEditingController.text.replaceAll(" ", "");
-    if (value.trim() == "₹") {
+    if (value.trim() == currencyFormat!.symbol) {
       return "";
     }
     return formatter.parse(textEditingController.text).toString();
@@ -291,11 +303,15 @@ class AmountFormFieldController extends FormFieldController {
   @override
   set text(value) {
     NumberFormat formatter = NumberFormat.currency(
-      name: "INR",
-      locale: 'en_IN',
-      decimalDigits: 0,
-      symbol: '₹',
+      name: currencyFormat!.name,
+      locale: currencyFormat!.locale,
+      decimalDigits: currencyFormat!.decimalDigits,
+      symbol: currencyFormat!.symbol,
     );
+
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
+
     try {
       textEditingController.text = formatter.format(double.parse(value));
     } catch (ex) {
@@ -316,8 +332,10 @@ class AmountFormFieldController extends FormFieldController {
       TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter =>
-      [CurrencyInputFormatter(maxDigits: 50)];
+  List<TextInputFormatter> get inputFormatter => [
+        CurrencyInputFormatter(maxDigits: 50, currencyFormat: currencyFormat),
+        LengthLimitingTextInputFormatter(maxLength)
+      ];
 
   @override
   bool get allowPaste => false;

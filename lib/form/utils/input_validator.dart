@@ -151,7 +151,7 @@ class InputValidator {
       return requiredText ?? "Invalid GST Number !";
     }
 
-    if (!RegExp(r"[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[0-9]{1}")
+    if (!RegExp(r"[0-9]{2}[A-Z]{5}[0-9]{4}[A-Z]{1}[0-9]{1}[A-Z]{1}[A-Z0-9]{1}")
         .hasMatch(value!)) {
       return "Please enter a valid GST Number";
     }

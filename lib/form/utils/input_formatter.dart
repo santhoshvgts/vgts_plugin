@@ -1,6 +1,8 @@
 import 'package:flutter/services.dart';
 
 import '../../constants/vgts_constant.dart';
+import 'package:intl/intl.dart';
+import 'package:vgts_plugin/form/utils/number_currency_format.dart';
 
 class InputFormatter {
   static List<TextInputFormatter> phoneNoFormatter = [
@@ -98,9 +100,10 @@ class MaskedTextInputFormatter extends TextInputFormatter {
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
-  CurrencyInputFormatter({this.maxDigits = 10, this.isSubtract = false});
+  CurrencyInputFormatter({this.maxDigits = 10, this.currencyFormat});
+
   final int maxDigits;
-  final bool isSubtract;
+  final NumberCurrencyFormat? currencyFormat;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -111,13 +114,29 @@ class CurrencyInputFormatter extends TextInputFormatter {
     if (newValue.selection.baseOffset > maxDigits) {
       return oldValue;
     }
-    final formatter = VgtsConstant.currencyFormatter(
-        decimalDigits: 0, isSubtract: isSubtract);
-    final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9].'), '');
+
+    print("New Value: $newValue");
+
+    final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9]'), '');
+    // final oldValueText = oldValue.text.replaceAll(RegExp(r'[0-9-]{1}[0-9]*\.?[0-9]*$'), '');
+
+    print("oldValueText: $oldValueText");
+    print(oldValueText);
+
+    NumberFormat formatter = NumberFormat.currency(
+      name: currencyFormat?.name ?? "INR",
+      locale: currencyFormat?.locale ?? 'en_IN',
+      decimalDigits: currencyFormat?.decimalDigits ?? 0,
+      symbol: currencyFormat?.symbol ?? '₹',
+    );
+
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
 
     String newValueText = '';
     try {
       newValueText = formatter.parse(newValue.text).toString();
+      print("newValueText $newValueText");
     } catch (ex) {}
 
     if (oldValueText == newValue.text) {
@@ -129,7 +148,16 @@ class CurrencyInputFormatter extends TextInputFormatter {
     if (newValueText.isNotEmpty) {
       double value = double.parse(newValueText);
       newText = formatter.format(value);
+      if (newValue.text.endsWith('.')) {
+        newText = newText + '.';
+      } else if (newValue.text.endsWith(".0")) {
+        newText = newText + '.0';
+      }
+      // RegExp regex = RegExp(r'([.]*0)(?!.*\d)');
+      // newText = newText.replaceAll(regex, '');
     }
+
+    print("newText $newText");
 
     return newValue.copyWith(
         text: newText,
