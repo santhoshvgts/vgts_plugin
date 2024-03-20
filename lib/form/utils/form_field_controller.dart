@@ -1,3 +1,4 @@
+import 'dart:io';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
@@ -7,12 +8,10 @@ import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
 import 'package:vgts_plugin/form/utils/number_currency_format.dart';
 
-
 //  Base Form Field Controller
 //  This controller will be used as Parent class for pre templated form field
 //
 class FormFieldController {
-
   Key fieldKey;
 
   TextEditingController textEditingController = new TextEditingController();
@@ -20,7 +19,8 @@ class FormFieldController {
 
   TextCapitalization textCapitalization = TextCapitalization.none;
 
-  String? Function(String?)? validator = (String? p1) => InputValidator.emptyValidator(p1,);
+  String? Function(String?)? validator =
+      (String? p1) => InputValidator.emptyValidator(p1);
   List<TextInputFormatter> inputFormatter = InputFormatter.defaultFormatter;
 
   TextInputType textInputType;
@@ -48,7 +48,8 @@ class FormFieldController {
 
   bool get hasFocus => focusNode.hasFocus;
 
-  FormFieldController(this.fieldKey, {
+  FormFieldController(
+    this.fieldKey, {
     this.textInputType = TextInputType.text,
     this.textCapitalization = TextCapitalization.none,
     this.validator = InputValidator.emptyValidator,
@@ -59,7 +60,6 @@ class FormFieldController {
     this.required = false,
     this.allowPaste = true,
   });
-
 
   // FormFieldController.amount(this.fieldKey, {
   //   this.textInputType = TextInputType.text,
@@ -74,13 +74,11 @@ class FormFieldController {
   //   this.textEditingController = _MoneyMaskedTextController(initialValue: 0, thousandSeparator: ",", decimalSeparator: ".", precision: 2);
   // }
 
-  dispose(){
+  dispose() {
     _focusNode.dispose();
     _focusNode = FocusNode();
   }
-
 }
-
 
 //  Phone Form Field Controller
 //  This controller used for only Phone Number Field
@@ -93,16 +91,21 @@ class FormFieldController {
 //  * required - default will be true
 //
 class PhoneFormFieldController extends FormFieldController {
-
   String? requiredText;
 
-  PhoneFormFieldController(Key fieldKey, { int maxLength = 10, bool required = true, this.requiredText }) : super(fieldKey, maxLength: maxLength, required: required);
+  PhoneFormFieldController(Key fieldKey,
+      {int maxLength = 10, bool required = true, this.requiredText})
+      : super(fieldKey, maxLength: maxLength, required: required);
 
   @override
-  List<TextInputFormatter> get inputFormatter => InputFormatter.phoneNoFormatter;
+  List<TextInputFormatter> get inputFormatter =>
+      InputFormatter.phoneNoFormatter;
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.phoneValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) =>
+          InputValidator.phoneValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.number;
@@ -111,20 +114,18 @@ class PhoneFormFieldController extends FormFieldController {
   set maxLength(int _maxLength) {
     super.maxLength = _maxLength;
   }
-
 }
 
 class IdFormFieldController extends FormFieldController {
-
   String? requiredText;
 
-  IdFormFieldController(Key fieldKey, { bool required = true, this.requiredText}) : super(fieldKey, required: required);
+  IdFormFieldController(Key fieldKey, {bool required = true, this.requiredText})
+      : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => (String? p1) => InputValidator.idValidator(p1);
-
+  String? Function(String? p1)? get validator =>
+      (String? p1) => InputValidator.idValidator(p1);
 }
-
 
 //  Email Address Form Field Controller
 //  This controller used for only Email Address Field
@@ -136,17 +137,18 @@ class IdFormFieldController extends FormFieldController {
 //  * required - default will be true
 //
 class EmailFormFieldController extends FormFieldController {
-
   String? requiredText;
 
-  EmailFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
+  EmailFormFieldController(Key fieldKey,
+      {bool required = true, this.requiredText})
+      : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => (String? p1) => InputValidator.emailValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => (String? p1) =>
+      InputValidator.emailValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.emailAddress;
-
 }
 
 //  Multi Line Form Field Controller
@@ -160,11 +162,13 @@ class EmailFormFieldController extends FormFieldController {
 //  * required - default will be false
 //
 class MultiLineFormFieldController extends FormFieldController {
-
-  MultiLineFormFieldController(Key fieldKey,  { bool required = false, int minLines = 3 }) : super(fieldKey, minLines: minLines, required: required);
+  MultiLineFormFieldController(Key fieldKey,
+      {bool required = false, int minLines = 3})
+      : super(fieldKey, minLines: minLines, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : super.validator;
+  String? Function(String? p1)? get validator =>
+      !this.required ? null : super.validator;
 
   @override
   TextInputType get textInputType => TextInputType.multiline;
@@ -172,8 +176,6 @@ class MultiLineFormFieldController extends FormFieldController {
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 }
-
-
 
 //  Name Form Field Controller
 //  This controller used for name text field like Full Name, Last Name.
@@ -185,33 +187,37 @@ class MultiLineFormFieldController extends FormFieldController {
 //  * required - default will be true
 //
 class NameFormFieldController extends FormFieldController {
-
   String? requiredText;
 
   bool _strictFormatter = false;
 
-  NameFormFieldController(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required);
+  NameFormFieldController(Key fieldKey,
+      {bool required = true, this.requiredText})
+      : super(fieldKey, required: required);
 
-  NameFormFieldController.strict(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required) {
-   _strictFormatter = true;
+  NameFormFieldController.strict(Key fieldKey,
+      {bool required = true, this.requiredText})
+      : super(fieldKey, required: required) {
+    _strictFormatter = true;
   }
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.nameValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) =>
+          InputValidator.nameValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.name;
 
   @override
-  List<TextInputFormatter> get inputFormatter => _strictFormatter ? InputFormatter.nameStrictFormatter : InputFormatter.nameFormatter;
+  List<TextInputFormatter> get inputFormatter => _strictFormatter
+      ? InputFormatter.nameStrictFormatter
+      : InputFormatter.nameFormatter;
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.words;
-
 }
-
-
-
 
 //  Number Form Field Controller
 //  This controller used for number text field like Amount, Quantity, Age etc.
@@ -223,23 +229,28 @@ class NameFormFieldController extends FormFieldController {
 //  * required - default will be false
 //
 class NumberFormFieldController extends FormFieldController {
-
   String? requiredText;
 
-  NumberFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, int? maxLength }) : super(fieldKey, required: required, maxLength: maxLength ?? 25);
+  NumberFormFieldController(Key fieldKey,
+      {bool required = false, this.requiredText, int? maxLength})
+      : super(fieldKey, required: required, maxLength: maxLength ?? 25);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) =>
+          InputValidator.numberValidator(p1, requiredText: requiredText);
 
   @override
-  TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true,);
+  TextInputType get textInputType => TextInputType.numberWithOptions(
+        decimal: true,
+      );
 
   @override
   List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
-
 }
 
 //  Amount Form Field Controller
@@ -253,12 +264,16 @@ class NumberFormFieldController extends FormFieldController {
 //
 
 class AmountFormFieldController extends FormFieldController {
-
   String? requiredText;
   NumberCurrencyFormat? currencyFormat;
   int maxLength;
 
-  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.maxLength = 20, NumberCurrencyFormat? currencyFormat }) : super(fieldKey, required: required) {
+  AmountFormFieldController(Key fieldKey,
+      {bool required = false,
+      this.requiredText,
+      this.maxLength = 20,
+      NumberCurrencyFormat? currencyFormat})
+      : super(fieldKey, required: required) {
     this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.usd();
   }
 
@@ -307,49 +322,59 @@ class AmountFormFieldController extends FormFieldController {
   }
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) =>
+          InputValidator.emptyValidator(p1, requiredText: requiredText);
 
   @override
-  TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
+  TextInputType get textInputType =>
+      TextInputType.numberWithOptions(decimal: true);
 
   @override
-  List<TextInputFormatter> get inputFormatter => [ CurrencyInputFormatter(maxDigits: 50, currencyFormat: currencyFormat) , LengthLimitingTextInputFormatter(maxLength)];
+  List<TextInputFormatter> get inputFormatter => [
+        CurrencyInputFormatter(maxDigits: 50, currencyFormat: currencyFormat),
+        LengthLimitingTextInputFormatter(maxLength)
+      ];
 
   @override
   bool get allowPaste => false;
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
-
 }
-
 
 class AgeFormFieldController extends FormFieldController {
   String? requiredText;
   int minAge;
 
-  AgeFormFieldController(Key fieldKey, {bool required = false, this.requiredText, this.minAge = 10}) : super(fieldKey, required: required);
+  AgeFormFieldController(Key fieldKey,
+      {bool required = false, this.requiredText, this.minAge = 10})
+      : super(fieldKey, required: required);
 
   @override
   String? Function(String? p1)? get validator => !this.required
       ? null
       : (String? p1) {
-    String? value = InputValidator.numberValidator(p1, requiredText: requiredText);
-    if (value != null) {
-      return value;
-    }
+          String? value =
+              InputValidator.numberValidator(p1, requiredText: requiredText);
+          if (value != null) {
+            return value;
+          }
 
-    int age = int.tryParse(p1.toString()) ?? 0;
-    if (age < minAge) {
-      return "Age should be ${minAge} or above";
-    }
-  };
+          int age = int.tryParse(p1.toString()) ?? 0;
+          if (age < minAge) {
+            return "Age should be $minAge or above";
+          }
+          return null;
+        };
 
   @override
   int get maxLength => 2;
 
   @override
-  TextInputType get textInputType => const TextInputType.numberWithOptions(decimal: false);
+  TextInputType get textInputType =>
+      const TextInputType.numberWithOptions(decimal: false);
 
   @override
   List<TextInputFormatter> get inputFormatter => InputFormatter.numberFormatter;
@@ -361,20 +386,25 @@ class AgeFormFieldController extends FormFieldController {
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 }
 
-
 class PercentageFormFieldController extends FormFieldController {
   String? requiredText;
 
-  PercentageFormFieldController(Key fieldKey, {bool required = false, this.requiredText}) : super(fieldKey, required: required);
+  PercentageFormFieldController(Key fieldKey,
+      {bool required = false, this.requiredText})
+      : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) =>
+          InputValidator.numberValidator(p1, requiredText: requiredText);
 
   @override
   int get maxLength => 3;
 
   @override
-  TextInputType get textInputType => const TextInputType.numberWithOptions(decimal: false, signed: false);
+  TextInputType get textInputType =>
+      const TextInputType.numberWithOptions(decimal: false, signed: false);
 
   @override
   bool get allowPaste => false;
@@ -385,7 +415,6 @@ class PercentageFormFieldController extends FormFieldController {
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
 }
-
 
 //  Text Form Field Controller
 //  This controller is the default controller that can be used for normal text. it allows any character.
@@ -397,35 +426,43 @@ class PercentageFormFieldController extends FormFieldController {
 //  * required - default will be false
 //
 class TextFormFieldController extends FormFieldController {
-
   String? requiredText;
 
   TextInputType? inputType;
 
   TextCapitalization? textCapital;
 
-  TextFormFieldController(Key fieldKey,  { bool required = false, this.inputType, this.textCapital, this.requiredText }) : super(fieldKey, required: required);
+  TextFormFieldController(Key fieldKey,
+      {bool required = false,
+      this.inputType,
+      this.textCapital,
+      this.requiredText})
+      : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required
+      ? null
+      : (String? p1) =>
+          InputValidator.emptyValidator(p1, requiredText: requiredText);
 
   @override
-  TextInputType get textInputType => this.inputType??  TextInputType.text;
+  TextInputType get textInputType => this.inputType ?? TextInputType.text;
 
   @override
-  TextCapitalization get textCapitalization => this.textCapital?? TextCapitalization.sentences;
-
+  TextCapitalization get textCapitalization =>
+      this.textCapital ?? TextCapitalization.sentences;
 }
 
-
-class PasswordFormFieldController extends FormFieldController{
-
+class PasswordFormFieldController extends FormFieldController {
   String? requiredText;
 
-  PasswordFormFieldController(Key fieldKey,  { bool required = true,  this.requiredText  }) : super(fieldKey, required: required);
+  PasswordFormFieldController(Key fieldKey,
+      {bool required = true, this.requiredText})
+      : super(fieldKey, required: required);
 
   @override
-  String? Function(String? p1)? get validator => (String? p1) => InputValidator.passwordValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => (String? p1) =>
+      InputValidator.passwordValidator(p1, requiredText: requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.visiblePassword;
@@ -447,7 +484,6 @@ class PasswordFormFieldController extends FormFieldController{
 //  * dataList - list of objects (object should extend BaseObject)
 //
 class DropdownFieldController<T extends BaseObject> {
-
   Key fieldKey;
   FocusNode focusNode = new FocusNode();
   T? value;
@@ -456,11 +492,15 @@ class DropdownFieldController<T extends BaseObject> {
   String valueId;
   bool required;
 
-  DropdownFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.value, this.dataList = const [], this.required = true });
+  DropdownFieldController(this.fieldKey,
+      {required this.keyId,
+      required this.valueId,
+      this.value,
+      this.dataList = const [],
+      this.required = true});
 
   String? validator(T? value) {
-    if (value == null && required)
-      return "Required !";
+    if (value == null && required) return "Required !";
 
     return null;
   }
@@ -479,7 +519,6 @@ class DropdownFieldController<T extends BaseObject> {
   clear() {
     list = [];
   }
-
 }
 
 //  MultiSelection Form Field Controller
@@ -498,7 +537,6 @@ class DropdownFieldController<T extends BaseObject> {
 //  * dataList - list of objects (object should extend BaseObject)
 //
 class MultiSelectionFieldController<T extends BaseObject> {
-
   Key fieldKey;
   FocusNode focusNode = new FocusNode();
   List<T> value;
@@ -507,11 +545,15 @@ class MultiSelectionFieldController<T extends BaseObject> {
   String valueId;
   bool required;
 
-  MultiSelectionFieldController(this.fieldKey, { required this.keyId, required this.valueId, this.value = const [], this.dataList = const [], this.required = true });
+  MultiSelectionFieldController(this.fieldKey,
+      {required this.keyId,
+      required this.valueId,
+      this.value = const [],
+      this.dataList = const [],
+      this.required = true});
 
   String? validator(T? value) {
-    if (value == null && required)
-      return "Required !";
+    if (value == null && required) return "Required !";
 
     return null;
   }
@@ -526,34 +568,28 @@ class MultiSelectionFieldController<T extends BaseObject> {
     this.value = [];
     this.dataList = list;
   }
-
 }
 
-
-
 class ImageFieldController {
-
   Key fieldKey;
   FocusNode focusNode = new FocusNode();
-  String? value;
+  File? value;
   bool required;
 
-  ImageFieldController(this.fieldKey, { this.value, this.required = true });
+  ImageFieldController(this.fieldKey, {this.value, this.required = true});
 
-  setValue(String value){
+  setValue(File value) {
     this.value = value;
   }
 
-  String? validator(String? value) {
-    if (required && value == null)
-      return "Required !";
+  String? validator(File? value) {
+    if (required && value == null) return "Required !";
 
     return null;
   }
-
 }
 
-
+// ignore: unused_element
 /// A [TextEditingController] extended to apply masks to currency values
 class _MoneyMaskedTextController extends TextEditingController {
   _MoneyMaskedTextController({
@@ -702,7 +738,7 @@ class _MoneyMaskedTextController extends TextEditingController {
         // Then we get the substring containing the characters to be skipped so
         // that we can position the cursor properly
         final skippedString =
-        text.substring(numberOfLeadingZeros, selection.baseOffset);
+            text.substring(numberOfLeadingZeros, selection.baseOffset);
 
         // Positions the cursor right after going through all the characters
         // that are in the skippedString
@@ -777,4 +813,3 @@ class _MoneyMaskedTextController extends TextEditingController {
     return masked;
   }
 }
-
