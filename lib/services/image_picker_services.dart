@@ -53,22 +53,33 @@ class ImagePickerService {
         }
       }
 
-      List<File> waterMarkFiles = [];
-      if (isWaterMater && files.isNotEmpty == true) {
-        for (final e in files) {
-          final formatter = DateFormat('dd/MM/yyyy h:mm a');
-          final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
-              text: waterMarkText ?? '${formatter.format(DateTime.now())}');
-          waterMarkFiles.add(waterMarkFile!);
-        }
-        files = waterMarkFiles;
-      }
+      List<File> waterMarkFiles =
+          await addWaterMarks(files: files, isWaterMater: true) ?? files;
+
+      files = waterMarkFiles;
 
       Navigator.pop(context);
       return files;
     } catch (e) {
       return null;
     }
+  }
+
+  Future<List<File>?> addWaterMarks(
+      {List<File>? files,
+      bool isWaterMater = true,
+      String? waterMarkText}) async {
+    List<File> waterMarkFiles = [];
+    if (isWaterMater && files?.isNotEmpty == true) {
+      for (final e in files!) {
+        final formatter = DateFormat('dd/MM/yyyy h:mm a');
+        final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
+            text: waterMarkText ?? '${formatter.format(DateTime.now())}');
+        waterMarkFiles.add(waterMarkFile!);
+      }
+      files = waterMarkFiles;
+    }
+    return files;
   }
 
   Future<XFile?> _compressImage(File? filePath) async {

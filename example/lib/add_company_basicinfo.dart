@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
+
 import 'package:vgts_plugin/form/utils/input_formatter.dart';
 import 'package:vgts_plugin/form/utils/input_validator.dart';
+
 import 'package:vgts_plugin/vgts_plugin.dart';
 import 'package:vgts_plugin_example/currency.dart';
 import 'package:vgts_plugin_example/res/colors.dart';
@@ -172,9 +174,7 @@ class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
                 ),
               ),
               MaterialButton(
-                onPressed: () {
-                  if (viewModel.basicInfoFormKey.currentState!.validate()) {}
-                },
+                onPressed: () async {},
                 child: Text("Submit"),
               )
             ],
