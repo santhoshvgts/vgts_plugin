@@ -25,11 +25,8 @@ apply plugin: 'com.android.library'
 apply plugin: 'kotlin-android'
 
 android {
-
-    // conditional for compatibility with older gradle versions
-    if (project.android.hasProperty('namespace')) {
-        namespace "vgts.plugin.vgts_plugin_example"
-    }
+    
+    namespace 'vgts.plugin.vgts_plugin'
 
     compileSdkVersion 33
 
