@@ -4,7 +4,7 @@ import 'package:file_picker/file_picker.dart';
 import 'package:flutter/widgets.dart';
 import 'package:vgts_plugin/services/image_picker_services.dart';
 
-class PdfPickerServices {
+class FilePickerServices {
   Future<List<File?>?> pickPdfFile(
       {List<String>? allowedExtensions,
       String? dialogTitle,
