@@ -1,5 +1,6 @@
 import 'dart:io';
 
+import 'package:image/image.dart' as img;
 import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
 import 'package:flutter/cupertino.dart';
@@ -9,6 +10,7 @@ import 'package:path_provider/path_provider.dart';
 import 'package:vgts_plugin/widget/choose_image_widget.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
+import '../constants/vgts_constant.dart';
 import 'add_text_watermark.dart';
 
 class ImagePickerService {
@@ -48,7 +50,10 @@ class ImagePickerService {
       if (isCompressed) {
         for (final e in selectedFile) {
           final file = File(e!.path);
-          final compressed = await _compressImage(file);
+          final convertImage = file.absolute.path.contains('.png')
+              ? await convertPngToJpg(file.absolute.path)
+              : file;
+          final compressed = await _compressImage(convertImage);
           if (compressed != null) files.add(File(compressed.path));
         }
       }
@@ -71,16 +76,31 @@ class ImagePickerService {
     }
   }
 
+  Future<File> convertPngToJpg(String path) async {
+    final jpgPath = '${path.replaceAll('.png', '.jpg')}';
+    final image = img.decodeImage(File(path).readAsBytesSync());
+    final jpgImage = img.encodeJpg(image!, quality: 50);
+    final file = await File(jpgPath).writeAsBytes(jpgImage);
+    debugPrint('jpg file path ${file.path}');
+    return file;
+  }
+
   Future<XFile?> _compressImage(File? filePath) async {
     final dir = await getTemporaryDirectory();
     final path = filePath?.absolute.path;
     final isPng = path?.contains('.png');
-    return await FlutterImageCompress.compressAndGetFile(
+    debugPrint(
+        'image-size before compress : ${path != null ? await VgtsConstant.getFileSize(path) : 0}');
+
+    final file = await FlutterImageCompress.compressAndGetFile(
         path!, '${dir.absolute.path}/temp.${isPng! ? 'png' : 'jpg'}',
         format: (isPng) ? CompressFormat.png : CompressFormat.jpeg,
         minWidth: 600,
         minHeight: 500,
-        quality: 90);
+        quality: 70);
+    debugPrint(
+        'image-size after compress :  ${file != null ? await VgtsConstant.getFileSize(file.path) : 0}');
+    return file;
   }
 
   Future<File?> imageCropper(File? selectedFile) async {

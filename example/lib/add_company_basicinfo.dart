@@ -69,15 +69,9 @@ class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
                             keyboardType: TextInputType.number,
                             decoration: InputDecoration(hintText: 'Amount'),
                             inputFormatters: [
-                              AmountInputFormatter(maxDigits: 12)
+                              CurrencyInputFormatter(maxDigits: 10)
                             ],
-                            validator: (value) =>
-                                InputValidator.amountValidator(value,
-                                    price: '100.00',
-                                    greaterThanText: 'Amount less than price',
-                                    isEqualTo: true,
-                                    isOptional: false,
-                                    isZeroAmt: true),
+                            validator: (value) => null,
                           ),
                         ),
                         Padding(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
 import '../../constants/vgts_constant.dart';
@@ -98,8 +99,12 @@ class MaskedTextInputFormatter extends TextInputFormatter {
 }
 
 class CurrencyInputFormatter extends TextInputFormatter {
-  CurrencyInputFormatter({this.maxDigits = 10, this.isSubtract = false});
+  CurrencyInputFormatter(
+      {this.maxDigits = 10,
+      this.isSubtract = false,
+      this.isDigitsValidation = false});
   final int maxDigits;
+  final bool isDigitsValidation;
   final bool isSubtract;
 
   @override
@@ -108,32 +113,39 @@ class CurrencyInputFormatter extends TextInputFormatter {
     if (newValue.selection.baseOffset == 0) {
       return newValue;
     }
-    if (newValue.selection.baseOffset > maxDigits) {
+    final newFormatTxt =
+        newValue.text.replaceAll('₹', '').replaceAll(',', '').trim().split('.');
+    if (newFormatTxt.isNotEmpty && newFormatTxt.first.length > maxDigits) {
       return oldValue;
     }
+
     final formatter = VgtsConstant.currencyFormatter(
         decimalDigits: 0, isSubtract: isSubtract);
     final oldValueText = oldValue.text.replaceAll(RegExp(r'[^0-9].'), '');
 
     String newValueText = '';
     try {
-      newValueText = formatter.parse(newValue.text).toString();
-    } catch (ex) {}
+      newValueText = newValue.text == '₹' || newValue.text.isEmpty
+          ? ''
+          : formatter.parse(newValue.text).toString();
 
-    if (oldValueText == newValue.text) {
-      newValueText = newValueText.substring(0, newValue.selection.end - 1) +
-          newValueText.substring(newValue.selection.end, newValueText.length);
+      if (oldValueText == newValue.text) {
+        newValueText = newValueText.substring(0, newValue.selection.end - 1) +
+            newValueText.substring(newValue.selection.end, newValueText.length);
+      }
+
+      String newText = "";
+      if (newValueText.isNotEmpty) {
+        double value = double.parse(newValueText);
+        newText = formatter.format(value);
+      }
+
+      return newValue.copyWith(
+          text: newText,
+          selection: TextSelection.collapsed(offset: newText.length));
+    } catch (ex) {
+      throw FlutterError('exception $ex');
     }
-
-    String newText = "";
-    if (newValueText.isNotEmpty) {
-      double value = double.parse(newValueText);
-      newText = formatter.format(value);
-    }
-
-    return newValue.copyWith(
-        text: newText,
-        selection: TextSelection.collapsed(offset: newText.length));
   }
 }
 
