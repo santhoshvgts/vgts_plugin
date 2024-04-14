@@ -59,7 +59,8 @@ class ImagePickerService {
       List<File> files = [];
 
       if (isCompressed) {
-        for (final e in waterMarkFiles) {
+        final images = waterMarkFiles.isNotEmpty ? waterMarkFiles : imagesList;
+        for (final e in images) {
           final path = e.path;
           final convertImage =
               path.contains('.png') ? await convertPngToJpg(path) : e;
