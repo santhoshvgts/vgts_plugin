@@ -1,17 +1,17 @@
 import 'dart:io';
 
-import 'package:image/image.dart' as img;
-import 'package:flutter/material.dart';
 import 'package:intl/intl.dart';
+import 'package:flutter/material.dart';
 import 'package:flutter/cupertino.dart';
+
+import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
-import 'package:path_provider/path_provider.dart';
-import 'package:vgts_plugin/widget/choose_image_widget.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
-import '../constants/vgts_constant.dart';
 import 'add_text_watermark.dart';
+import '../widget/choose_image_widget.dart';
+import '../constants/vgts_constant.dart';
 
 class ImagePickerService {
   final _picker = ImagePicker();
@@ -44,32 +44,32 @@ class ImagePickerService {
 
       showLoadingIndicator(context);
 
-      List<File> files =
-          isCompressed ? [] : selectedFile.map((e) => File(e!.path)).toList();
-
-      if (isCompressed) {
-        for (final e in selectedFile) {
-          final file = File(e!.path);
-          final convertImage = file.absolute.path.contains('.png')
-              ? await convertPngToJpg(file.absolute.path)
-              : file;
-          final compressed = await _compressImage(convertImage);
-          if (compressed != null) files.add(File(compressed.path));
-        }
-      }
+      final imagesList = selectedFile.map((e) => File(e!.path)).toList();
 
       List<File> waterMarkFiles = [];
-      if (isWaterMater && files.isNotEmpty == true) {
-        for (final e in files) {
+      if (isWaterMater && imagesList.isNotEmpty) {
+        for (final e in imagesList) {
           final formatter = DateFormat('dd/MM/yyyy h:mm a');
           final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
               text: waterMarkText ?? '${formatter.format(DateTime.now())}');
           waterMarkFiles.add(waterMarkFile!);
         }
-        files = waterMarkFiles;
+      }
+
+      List<File> files = [];
+
+      if (isCompressed) {
+        for (final e in waterMarkFiles) {
+          final path = e.path;
+          final convertImage =
+              path.contains('.png') ? await convertPngToJpg(path) : e;
+          final compressed = await _compressImage(convertImage);
+          if (compressed != null) files.add(File(compressed.path));
+        }
       }
 
       Navigator.pop(context);
+      if (files.isEmpty) return waterMarkFiles;
       return files;
     } catch (e) {
       return null;
@@ -85,26 +85,26 @@ class ImagePickerService {
     return file;
   }
 
-  Future<XFile?> _compressImage(File? filePath) async {
-    final dir = await getTemporaryDirectory();
-    final path = filePath?.absolute.path;
-    final isPng = path?.contains('.png');
+  Future<XFile?> _compressImage(File? image) async {
+    final path = image?.path;
+    final dir = await VgtsConstant.createTempDirectory();
+    final isPng = path?.contains('.png') == true;
     debugPrint(
         'image-size before compress : ${path != null ? await VgtsConstant.getFileSize(path) : 0}');
 
     final file = await FlutterImageCompress.compressAndGetFile(
-        path!, '${dir.absolute.path}/temp.${isPng! ? 'png' : 'jpg'}',
+        path!, '${dir.$1.absolute.path}/${dir.$2}.jpg',
         format: (isPng) ? CompressFormat.png : CompressFormat.jpeg,
         minWidth: 600,
         minHeight: 500,
         quality: 70);
     debugPrint(
-        'image-size after compress :  ${file != null ? await VgtsConstant.getFileSize(file.path) : 0}');
+        'image-size after compress :  ${file != null ? await VgtsConstant.getFileSize(path) : 0}');
     return file;
   }
 
   Future<File?> imageCropper(File? selectedFile) async {
-    final path = selectedFile?.absolute.path;
+    final path = selectedFile?.path;
     final isPng = path?.contains('.png');
     final croppedFile = await ImageCropper().cropImage(
       sourcePath: selectedFile!.path,
@@ -117,10 +117,10 @@ class ImagePickerService {
   }
 
   void showLoadingIndicator(BuildContext context) async {
-    showDialog(
+    await showDialog(
         barrierDismissible: false,
         context: context,
-        builder: (_) {
+        builder: (context) {
           return Dialog(
             backgroundColor: Colors.white,
             child: Padding(

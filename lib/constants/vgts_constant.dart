@@ -2,6 +2,7 @@ import 'dart:io';
 import 'dart:math';
 
 import 'package:intl/intl.dart';
+import 'package:path_provider/path_provider.dart';
 
 sealed class VgtsConstant {
   static NumberFormat currencyFormatter(
@@ -31,5 +32,14 @@ sealed class VgtsConstant {
     return ((bytes / pow(1024, i)).toStringAsFixed(decimals)) +
         ' ' +
         suffixes[i];
+  }
+
+  static Future<(Directory directory, String fileName)> createTempDirectory(
+      {String? fileName}) async {
+    final tempDir = await getTemporaryDirectory();
+    final _random = Random();
+    final randomFileName =
+        '${fileName != null ? fileName.split('.').first : 'temp'}_${(_random.nextInt(10000) + DateTime.now().millisecondsSinceEpoch).toString()}';
+    return (tempDir, randomFileName);
   }
 }
