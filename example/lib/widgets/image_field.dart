@@ -64,8 +64,8 @@ class _ImageFieldState extends State<ImageField> {
               InkWell(
                 onTap: () async {
                   final picker = getIt<ImagePickerService>();
-                  final images =
-                      await picker.pickImage(context, isMultiPicker: false);
+                  final images = await picker.pickImage(context,
+                      isMultiPicker: false, isWaterMater: false);
                   if (images?.isNotEmpty == true) {
                     setState(() {
                       widget.controller.setValue(images!.first);

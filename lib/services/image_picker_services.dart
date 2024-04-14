@@ -100,7 +100,7 @@ class ImagePickerService {
         minHeight: 500,
         quality: 70);
     debugPrint(
-        'image-size after compress :  ${file != null ? await VgtsConstant.getFileSize(path) : 0}');
+        'image-size after compress :  ${file != null ? await VgtsConstant.getFileSize(file.path) : 0}');
     return file;
   }
 
