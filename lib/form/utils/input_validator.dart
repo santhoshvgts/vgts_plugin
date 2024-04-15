@@ -45,9 +45,13 @@ class InputValidator {
   return null;
 }
 
-  static String? numberValidator(String? value, { String? requiredText }) {
+  static String? numberValidator(String? value, { String? requiredText , double? maxNumber}) {
     if (value?.trim()?.isEmpty != false)
       return requiredText ?? "Required !";
+
+    if(maxNumber!=null && value!=null)
+      if(double.parse(value) > maxNumber)
+        return "Value must be less than $maxNumber!";
 
     if ((value?.trim()?.split("-").length ?? 0) > 2) {
       return requiredText ?? "Invalid Number !";

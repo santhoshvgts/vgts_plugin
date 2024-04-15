@@ -193,7 +193,7 @@ class NameFormFieldController extends FormFieldController {
   NameFormFieldController(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required);
 
   NameFormFieldController.strict(Key fieldKey,  { bool required = true, this.requiredText }) : super(fieldKey, required: required) {
-   _strictFormatter = true;
+    _strictFormatter = true;
   }
 
   @override
@@ -225,11 +225,12 @@ class NameFormFieldController extends FormFieldController {
 class NumberFormFieldController extends FormFieldController {
 
   String? requiredText;
+  double? maxNumber;
 
-  NumberFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, int? maxLength }) : super(fieldKey, required: required, maxLength: maxLength ?? 25);
+  NumberFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.maxNumber, int? maxLength }) : super(fieldKey, required: required, maxLength: maxLength ?? 25);
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.numberValidator(p1, requiredText: requiredText, maxNumber: maxNumber);
 
   @override
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true,);
@@ -256,9 +257,10 @@ class AmountFormFieldController extends FormFieldController {
 
   String? requiredText;
   NumberCurrencyFormat? currencyFormat;
+  double? maxAmount;
   int maxLength;
 
-  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.maxLength = 20, NumberCurrencyFormat? currencyFormat }) : super(fieldKey, required: required) {
+  AmountFormFieldController(Key fieldKey,  { bool required = false, this.requiredText, this.maxLength = 20, this.maxAmount, NumberCurrencyFormat? currencyFormat }) : super(fieldKey, required: required) {
     this.currencyFormat = currencyFormat ?? NumberCurrencyFormat.usd();
   }
 
@@ -287,27 +289,11 @@ class AmountFormFieldController extends FormFieldController {
 
   @override
   set text(value) {
-    NumberFormat formatter = NumberFormat.currency(
-      name: currencyFormat!.name,
-      locale: currencyFormat!.locale,
-      decimalDigits: currencyFormat!.decimalDigits,
-      symbol: currencyFormat!.symbol,
-    );
-
-    formatter.minimumFractionDigits = 0;
-    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
-
-    try {
-      textEditingController.text = formatter.format(double.parse(value));
-    } catch (ex) {
-      print(value);
-      print(ex);
-      textEditingController.text = value;
-    }
+    textEditingController.text = _currencyFormattedString(value) ?? value;
   }
 
   @override
-  String? Function(String? p1)? get validator => !this.required ? null : (String? p1) => InputValidator.emptyValidator(p1, requiredText: requiredText);
+  String? Function(String? p1)? get validator => (String? p1) => _amountValidator(p1, requiredText);
 
   @override
   TextInputType get textInputType => TextInputType.numberWithOptions(decimal: true);
@@ -320,6 +306,50 @@ class AmountFormFieldController extends FormFieldController {
 
   @override
   TextCapitalization get textCapitalization => TextCapitalization.sentences;
+
+  String? _amountValidator(String? value, String? requiredText) {
+    if(this.required)
+      if (value?.trim()?.isEmpty != false)
+        return requiredText ?? "Required !";
+    if (maxAmount != null) {
+      if (value != null && value.isNotEmpty) {
+        value = value.replaceAll(currencyFormat!.symbol, '');
+        try {
+          double amount = double.parse(value.replaceAll(',', ''));
+          if (amount > maxAmount!) {
+            return 'Amount must be less than ${_currencyFormattedString(
+                maxAmount.toString())}';
+          }
+        } catch (e) {
+          return 'Invalid amount';
+        }
+      }
+    }
+    else
+    {
+      return 'Invalid amount';
+    }
+  }
+
+  String? _currencyFormattedString(String value)
+  {
+    NumberFormat formatter = NumberFormat.currency(
+      name: currencyFormat!.name,
+      locale: currencyFormat!.locale,
+      decimalDigits: currencyFormat!.decimalDigits,
+      symbol: currencyFormat!.symbol,
+    );
+
+    formatter.minimumFractionDigits = 0;
+    formatter.maximumFractionDigits = currencyFormat?.decimalDigits ?? 0;
+
+    try {
+      return formatter.format(double.parse(value));
+    } catch (ex) {
+      return null;
+    }
+  }
+
 
 }
 
