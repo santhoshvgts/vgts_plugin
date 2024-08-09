@@ -185,7 +185,7 @@ class InputValidator {
       return requiredText ?? 'Required !';
     } else {
       if (!regex.hasMatch(value!)) {
-        return "Password must be atleast 8 characters that include lowercase,\nuppercase character, special character & number ";
+        return requiredText ?? "Password must be atleast 8 characters that include lowercase,\nuppercase character, special character & number ";
       } else {
         return null;
       }
