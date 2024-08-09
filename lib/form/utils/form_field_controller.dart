@@ -140,8 +140,8 @@ class EmailFormFieldController extends FormFieldController {
   String? requiredText;
 
   EmailFormFieldController(Key fieldKey,
-      {bool required = true, this.requiredText})
-      : super(fieldKey, required: required);
+      {bool required = true, this.requiredText,int? maxLength})
+      : super(fieldKey, required: required, maxLength: maxLength ?? 75);
 
   @override
   String? Function(String? p1)? get validator => (String? p1) =>
@@ -192,12 +192,12 @@ class NameFormFieldController extends FormFieldController {
   bool _strictFormatter = false;
 
   NameFormFieldController(Key fieldKey,
-      {bool required = true, this.requiredText})
-      : super(fieldKey, required: required);
+      {bool required = true, this.requiredText,int? maxLength})
+      : super(fieldKey, required: required, maxLength: maxLength ?? 50);
 
   NameFormFieldController.strict(Key fieldKey,
-      {bool required = true, this.requiredText})
-      : super(fieldKey, required: required) {
+      {bool required = true, this.requiredText,int? maxLength})
+      : super(fieldKey, required: required, maxLength: maxLength ?? 50) {
     _strictFormatter = true;
   }
 
