@@ -25,7 +25,7 @@ dependencies:
   flutter_image_compress: ^2.1.0
 
   #services
-  intl: ^0.18.1
+  intl: ^0.19.0
   equatable: ^2.0.5
 
 dev_dependencies:
