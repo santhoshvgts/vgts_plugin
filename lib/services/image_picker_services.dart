@@ -33,9 +33,8 @@ class ImagePickerService {
 
       if (imageSource == null) return [];
 
-      List<XFile?> selectedFile = isMultiPicker
-          ? await _picker.pickMultiImage(imageQuality: 50)
-          : [await _picker.pickImage(source: imageSource, imageQuality: 50)];
+      List<XFile?> selectedFile = await _pickImage(
+          {'isMultiPicker': isMultiPicker, 'imageSource': imageSource});
 
       if (selectedFile.isEmpty ||
           selectedFile.where((n) => n == null).isNotEmpty) {
@@ -75,6 +74,13 @@ class ImagePickerService {
     } catch (e) {
       return null;
     }
+  }
+
+  Future<List<XFile?>> _pickImage(Map params) async {
+    bool isMultiPicker = params['isMultiPicker'];
+    ImageSource? imageSource = params['imageSource'];
+    if (isMultiPicker) return (await _picker.pickMultiImage(imageQuality: 50));
+    return [await _picker.pickImage(source: imageSource!, imageQuality: 50)];
   }
 
   Future<File> convertPngToJpg(String path) async {
