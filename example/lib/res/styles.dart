@@ -1,4 +1,3 @@
-
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:vgts_plugin/form/config/form_field_config.dart';
@@ -6,47 +5,47 @@ import 'package:vgts_plugin/form/config/form_field_config.dart';
 import 'colors.dart';
 import 'fontsize.dart';
 
-
 class AppStyle {
-
   static final ThemeData appTheme = ThemeData(
     primaryColor: AppColor.primary,
     primaryColorDark: AppColor.primaryDark,
-    accentColor: AppColor.accent,
     dividerColor: AppColor.black10,
     brightness: Brightness.light,
     indicatorColor: AppColor.primaryDark,
-    textTheme: TextTheme(
-        button: TextStyle(color: AppColor.primary)
-    ),
-    primaryIconTheme: const IconThemeData.fallback().copyWith(
-        color: AppColor.black
-    ),
+    textTheme: TextTheme(labelLarge: TextStyle(color: AppColor.primary)),
+    primaryIconTheme:
+        const IconThemeData.fallback().copyWith(color: AppColor.black),
     appBarTheme: AppBarTheme().copyWith(
       color: AppColor.white,
-      brightness: Brightness.dark,
     ),
-    backgroundColor: AppColor.background,
     fontFamily: "GeneralSans",
     scaffoldBackgroundColor: AppColor.background,
+    //colorScheme: ColorScheme(background: AppColor.background),
   );
 
   static final List<BoxShadow> cardShadow = [
     BoxShadow(color: Colors.black12, spreadRadius: 0.3, blurRadius: 5),
   ];
 
-  static final Widget mildDivider = Container(height:1,child:Divider(color: AppColor.black10, thickness: 1,));
-  static final Widget divider = Divider(color: AppColor.text, thickness: 1,);
+  static final Widget mildDivider = Container(
+      height: 1,
+      child: Divider(
+        color: AppColor.black10,
+        thickness: 1,
+      ));
+  static final Widget divider = Divider(
+    color: AppColor.text,
+    thickness: 1,
+  );
 
   static final List<BoxShadow> mildCardShadow = [
     BoxShadow(color: Colors.black12, spreadRadius: 0.1, blurRadius: 1),
   ];
 
-  static final cardDecoration =  BoxDecoration(
-  color: AppColor.white,
-  border: Border.all(color: AppColor.black10,width: 2),
-  borderRadius: BorderRadius.all(Radius.circular(12.0))
-  );
+  static final cardDecoration = BoxDecoration(
+      color: AppColor.white,
+      border: Border.all(color: AppColor.black10, width: 2),
+      borderRadius: BorderRadius.all(Radius.circular(12.0)));
 
   static List<Shadow> textShadow = <Shadow>[
     Shadow(
@@ -61,7 +60,7 @@ class AppStyle {
     ),
   ];
 
-  static setSystemUIOverlayStyle(){
+  static setSystemUIOverlayStyle() {
     SystemChrome.setSystemUIOverlayStyle(SystemUiOverlayStyle(
         statusBarColor: AppColor.labelText,
         statusBarIconBrightness: Brightness.dark,
@@ -80,12 +79,10 @@ class AppStyle {
       type: FormInputDecorationType.Box,
       formInputLabelUIType: FormInputLabelUIType.Style1,
       borderColor: AppColor.secondaryBackground,
-      borderRadius: BorderRadius.circular(10)
-  );
+      borderRadius: BorderRadius.circular(10));
 }
 
 class AppTextStyle {
-
   static const TextStyle appBarTitle = TextStyle(
     fontSize: AppFontSize.dp24,
     fontWeight: FontWeight.w600,
@@ -93,63 +90,53 @@ class AppTextStyle {
   );
 
   static const TextStyle headerMedium = TextStyle(
-    fontSize: AppFontSize.dp28,
-    fontWeight: FontWeight.w600,
-    color: AppColor.text
-  );
+      fontSize: AppFontSize.dp28,
+      fontWeight: FontWeight.w600,
+      color: AppColor.text);
 
   static const TextStyle headerSemiBold = TextStyle(
       fontSize: AppFontSize.dp28,
       fontWeight: FontWeight.w800,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle subHeaderMedium = TextStyle(
       fontSize: AppFontSize.dp24,
       fontWeight: FontWeight.w600,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle titleMedium = TextStyle(
       fontSize: AppFontSize.dp20,
       fontWeight: FontWeight.w600,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle subtitleMedium = TextStyle(
       fontSize: AppFontSize.dp16,
       fontWeight: FontWeight.w600,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle subtitleRegular = TextStyle(
       fontSize: AppFontSize.dp16,
       fontWeight: FontWeight.w400,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle subtitleSemiBold = TextStyle(
       fontSize: AppFontSize.dp16,
       fontWeight: FontWeight.w800,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle bodyMedium = TextStyle(
       fontSize: AppFontSize.dp14,
       fontWeight: FontWeight.w600,
-      color: AppColor.text
-  );
+      color: AppColor.text);
   static const TextStyle bodyRegular = TextStyle(
       fontSize: AppFontSize.dp14,
       fontWeight: FontWeight.w400,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle bodySemiBold = TextStyle(
       fontSize: AppFontSize.dp16,
       fontWeight: FontWeight.w800,
-      color: AppColor.text
-  );
+      color: AppColor.text);
 
   static const TextStyle captionRegular = TextStyle(
     fontSize: AppFontSize.dp12,
@@ -172,17 +159,12 @@ class AppTextStyle {
   static const TextStyle button = TextStyle(
       fontSize: AppFontSize.dp14,
       fontWeight: FontWeight.w600,
-      color: AppColor.white
-  );
+      color: AppColor.white);
 
   static const TextStyle button2 = TextStyle(
       fontSize: AppFontSize.dp12,
       fontWeight: FontWeight.w600,
-      color: AppColor.primary
-  );
-
-
-
+      color: AppColor.primary);
 
 //  static const TextStyle header = TextStyle(
 //    fontSize: AppFontSize.xlarge,

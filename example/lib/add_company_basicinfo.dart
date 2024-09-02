@@ -1,29 +1,37 @@
-import 'package:flutter/cupertino.dart';
 import 'package:flutter/material.dart';
 import 'package:stacked/stacked.dart';
-import 'package:vgts_plugin/form/edit_text_field.dart';
-import 'package:vgts_plugin/form/image_field.dart';
+
+import 'package:vgts_plugin/form/utils/input_formatter.dart';
+import 'package:vgts_plugin/form/utils/input_validator.dart';
+
 import 'package:vgts_plugin/vgts_plugin.dart';
-import 'package:vgts_plugin_example/create_company_viewmodel.dart';
 import 'package:vgts_plugin_example/currency.dart';
 import 'package:vgts_plugin_example/res/colors.dart';
-import 'package:vgts_plugin_example/res/spacing.dart';
 import 'package:vgts_plugin_example/res/styles.dart';
+import 'package:vgts_plugin_example/widgets/image_field.dart';
+import 'package:vgts_plugin_example/widgets/dropdown_field.dart';
+import 'package:vgts_plugin_example/widgets/edit_text_field.dart';
+import 'package:vgts_plugin_example/create_company_viewmodel.dart';
 
-class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel> {
-
+class CompanyBasicInfoPage extends StackedView<CreateCompanyViewModel> {
   @override
-  Widget builder(BuildContext context, CreateCompanyViewModel viewModel, Widget? child) {
+  Widget builder(
+      BuildContext context, CreateCompanyViewModel viewModel, Widget? child) {
     return Scaffold(
       backgroundColor: AppColor.secondaryBackground,
-      appBar:AppBar(
+      appBar: AppBar(
           automaticallyImplyLeading: false,
           elevation: 0,
           titleSpacing: 0,
-          title: Text("Create Company",style: AppTextStyle.appBarTitle,textScaleFactor: 1,),
-          leading: IconButton(icon: Icon(Icons.arrow_back),
-            onPressed: () => Navigator.pop(context),)
-      ),
+          title: Text(
+            "Create Company",
+            style: AppTextStyle.appBarTitle,
+            textScaleFactor: 1,
+          ),
+          leading: IconButton(
+            icon: Icon(Icons.arrow_back),
+            onPressed: () => Navigator.pop(context),
+          )),
       body: VGTSForm(
         key: viewModel.basicInfoFormKey,
         child: Container(
@@ -38,23 +46,84 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
                     child: Column(
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
-
                         ImageField(
                           viewModel.itemImageController,
                           margin: EdgeInsets.only(top: 20),
                         ),
-
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(hintText: 'Percentage'),
+                            inputFormatters: [PercentageNumbersFormatter()],
+                            validator: (value) =>
+                                InputValidator.percentageValidator(value,
+                                    isDisccount: true, isOptional: false),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.number,
+                            decoration: InputDecoration(hintText: 'Amount'),
+                            inputFormatters: [
+                              AmountInputFormatter(maxDigits: 12)
+                            ],
+                            validator: (value) =>
+                                InputValidator.amountValidator(value,
+                                    price: '100.00',
+                                    greaterThanText: 'Amount less than price',
+                                    isEqualTo: true,
+                                    isOptional: false,
+                                    isZeroAmt: true),
+                          ),
+                        ),
+                        Padding(
+                          padding: const EdgeInsets.symmetric(vertical: 12),
+                          child: TextFormField(
+                            autovalidateMode:
+                                AutovalidateMode.onUserInteraction,
+                            keyboardType: TextInputType.text,
+                            decoration: InputDecoration(hintText: 'Name'),
+                            inputFormatters: [NoLeadingSpaceFormatter()],
+                          ),
+                        ),
+                        EditTextField(
+                          "Amount",
+                          viewModel.amountController,
+                          placeholder: "Enter Amount",
+                          //  margin: EdgeInsets.only(top: 15.0),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {},
+                        ),
+                        EditTextField(
+                          "Percent",
+                          viewModel.percentageNumberController,
+                          placeholder: "Enter Percent Number",
+                          margin: const EdgeInsets.symmetric(vertical: 12.0),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {},
+                        ),
+                        EditTextField(
+                          "Adhaar Number",
+                          viewModel.adhaarNumberController,
+                          placeholder: "Enter Adhar Number",
+                          //  margin: EdgeInsets.only(top: 15.0),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {},
+                        ),
                         EditTextField(
                           "Company Name",
-                          viewModel.companyNameController,
+                          viewModel.gstNoController,
                           placeholder: "Enter Company Name",
                           //  margin: EdgeInsets.only(top: 15.0),
                           onChanged: (value) {},
-                          onSubmitted: (val) {
-
-                          },
+                          onSubmitted: (val) {},
                         ),
-
                         EditTextField(
                           "Phone no",
                           viewModel.phoneController,
@@ -65,53 +134,49 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
                             viewModel.emailController.focusNode.requestFocus();
                           },
                         ),
-
                         EditTextField(
                           "Email Id",
                           viewModel.emailController,
                           margin: EdgeInsets.only(top: 15),
                           onChanged: (value) {},
                           onSubmitted: (val) {
-                            viewModel.websiteController.focusNode.requestFocus();
+                            viewModel.websiteController.focusNode
+                                .requestFocus();
                           },
                         ),
-
+                        EditTextField(
+                          "Zip Code",
+                          viewModel.zipCodeController,
+                          margin: EdgeInsets.only(top: 15),
+                          onChanged: (value) {},
+                          onSubmitted: (val) {
+                            viewModel.websiteController.focusNode
+                                .requestFocus();
+                          },
+                        ),
                         EditTextField(
                           "Website Link",
                           viewModel.websiteController,
                           margin: EdgeInsets.only(top: 15, bottom: 15.0),
                           onChanged: (value) {},
-                          onSubmitted: (val) {
-
-                          },
+                          onSubmitted: (val) {},
                         ),
-
                         DropdownField<Currency>.withAdd(
                           "Currency Type",
                           viewModel.currencyController,
                           placeholder: "Select Currency Type",
                           margin: EdgeInsets.only(top: 15),
-                          onChange: (value) {
-
-                          },
+                          onChange: (value) {},
                         ),
-
-
                       ],
                     ),
                   ),
                 ),
               ),
-
               MaterialButton(
-                onPressed: (){
-                  if (viewModel.basicInfoFormKey.currentState!.validate()) {
-
-                  }
-                } ,
+                onPressed: () async {},
                 child: Text("Submit"),
               )
-
             ],
           ),
         ),
@@ -120,5 +185,6 @@ class CompanyBasicInfoPage extends ViewModelBuilderWidget<CreateCompanyViewModel
   }
 
   @override
-  CreateCompanyViewModel viewModelBuilder(BuildContext context) => CreateCompanyViewModel();
+  CreateCompanyViewModel viewModelBuilder(BuildContext context) =>
+      CreateCompanyViewModel();
 }

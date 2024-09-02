@@ -1,24 +1,24 @@
 import 'package:vgts_plugin/form/base_object.dart';
 
+// ignore: must_be_immutable
 class Currency extends BaseObject {
-
   int? id;
   String? name;
 
-  int?  status;
+  int? status;
   bool? deleted;
   String? createdAtTime;
   String? updatedAtTime;
   String? deletedAtTime;
 
-  Currency({ this.id,
+  Currency(
+      {this.id,
       this.name,
       this.status,
       this.deleted,
       this.createdAtTime,
       this.updatedAtTime,
-      this.deletedAtTime
-  });
+      this.deletedAtTime});
 
   Future<Currency> fromMap(Map<String, dynamic> data) async {
     id = data["id"];
@@ -43,5 +43,6 @@ class Currency extends BaseObject {
     return data;
   }
 
-
+  @override
+  List<Object?> get props => [id];
 }
