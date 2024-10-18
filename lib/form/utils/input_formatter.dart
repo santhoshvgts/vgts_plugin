@@ -138,9 +138,11 @@ class CurrencyInputFormatter extends TextInputFormatter {
 }
 
 class AmountInputFormatter extends TextInputFormatter {
-  AmountInputFormatter({this.decimalRange = 2, this.maxDigits = 6});
+  AmountInputFormatter(
+      {this.decimalRange = 2, this.maxDigits = 6, this.isSymbol = true});
   final int decimalRange;
   final int? maxDigits;
+  final bool isSymbol;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -173,16 +175,17 @@ class AmountInputFormatter extends TextInputFormatter {
 
     nSelection = newValue.selection
         .copyWith(baseOffset: nSelection.start, extentOffset: nSelection.end);
-
-    return TextEditingValue(text: '₹$nValue', composing: TextRange.empty);
+    final symbolText = isSymbol ? nValue : '₹$nValue';
+    return TextEditingValue(text: symbolText, composing: TextRange.empty);
   }
 }
 
 class PercentageNumbersFormatter extends TextInputFormatter {
   PercentageNumbersFormatter(
-      {this.decimalRange = 2, this.isFullPercent = true});
+      {this.decimalRange = 2, this.isFullPercent = true, this.isSymbol = true});
 
   final int decimalRange;
+  final bool isSymbol;
   final bool isFullPercent;
 
   @override
@@ -223,8 +226,9 @@ class PercentageNumbersFormatter extends TextInputFormatter {
         baseOffset: nSelection.baseOffset,
         extentOffset: nSelection.extentOffset);
 
+    final symbolText = isSymbol ? nValue : '$nValue%';
     return TextEditingValue(
-        text: '$nValue%', selection: nSelection, composing: TextRange.empty);
+        text: symbolText, selection: nSelection, composing: TextRange.empty);
   }
 }
 
