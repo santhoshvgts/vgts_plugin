@@ -175,7 +175,7 @@ class AmountInputFormatter extends TextInputFormatter {
 
     nSelection = newValue.selection
         .copyWith(baseOffset: nSelection.start, extentOffset: nSelection.end);
-    final symbolText = isSymbol ? nValue : '₹$nValue';
+    final symbolText = !isSymbol ? nValue : '₹$nValue';
     return TextEditingValue(text: symbolText, composing: TextRange.empty);
   }
 }
@@ -226,7 +226,7 @@ class PercentageNumbersFormatter extends TextInputFormatter {
         baseOffset: nSelection.baseOffset,
         extentOffset: nSelection.extentOffset);
 
-    final symbolText = isSymbol ? nValue : '$nValue%';
+    final symbolText = !isSymbol ? nValue : '$nValue%';
     return TextEditingValue(
         text: symbolText, selection: nSelection, composing: TextRange.empty);
   }
