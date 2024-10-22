@@ -60,7 +60,10 @@ class InputValidator {
   }
 
   static String? percentageValidator(String? value,
-      {String? requiredText, bool? isDisccount, bool? isOptional = true}) {
+      {String? requiredText,
+      bool? isDisccount,
+      bool? isOptional = true,
+      bool isGreatherThanOrEqual = true}) {
     if (value?.trim().isEmpty != false) {
       return requiredText ?? "Required !";
     }
@@ -75,9 +78,10 @@ class InputValidator {
       return "Invalid Percent Format";
     }
 
-    if (isDisccount == true &&
-        trimmedValue.isNotEmpty &&
-        double.parse(trimmedValue) >= 100) {
+    final verifyDiscount = isGreatherThanOrEqual
+        ? double.parse(trimmedValue) >= 100
+        : double.parse(trimmedValue) > 100;
+    if (isDisccount == true && trimmedValue.isNotEmpty && verifyDiscount) {
       return requiredText ?? 'Discount amount should be less than price';
     }
 
