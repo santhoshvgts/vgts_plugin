@@ -222,11 +222,14 @@ class PercentageNumbersFormatter extends TextInputFormatter {
       nValue = percentText;
     }
 
-    nSelection = newValue.selection.copyWith(
-        baseOffset: nSelection.baseOffset,
-        extentOffset: nSelection.extentOffset);
-
     final symbolText = !isSymbol ? nValue : '$nValue%';
+    int textLength = symbolText.length;
+
+    nSelection = newValue.selection.copyWith(
+      baseOffset: nSelection.baseOffset.clamp(0, textLength),
+      extentOffset: nSelection.extentOffset.clamp(0, textLength),
+    );
+
     return TextEditingValue(
         text: symbolText, selection: nSelection, composing: TextRange.empty);
   }
