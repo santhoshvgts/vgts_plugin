@@ -139,10 +139,14 @@ class CurrencyInputFormatter extends TextInputFormatter {
 
 class AmountInputFormatter extends TextInputFormatter {
   AmountInputFormatter(
-      {this.decimalRange = 2, this.maxDigits = 6, this.isSymbol = true});
+      {this.decimalRange = 2,
+      this.maxDigits = 6,
+      this.isSymbol = true,
+      this.price});
   final int decimalRange;
   final int? maxDigits;
   final bool isSymbol;
+  final double? price;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -173,6 +177,10 @@ class AmountInputFormatter extends TextInputFormatter {
       nValue = oldText;
     }
 
+    if (price != null && price == 0.0) {
+      nValue = '0';
+    }
+
     nSelection = newValue.selection
         .copyWith(baseOffset: nSelection.start, extentOffset: nSelection.end);
     final symbolText = !isSymbol ? nValue : '₹$nValue';
@@ -182,11 +190,15 @@ class AmountInputFormatter extends TextInputFormatter {
 
 class PercentageNumbersFormatter extends TextInputFormatter {
   PercentageNumbersFormatter(
-      {this.decimalRange = 2, this.isFullPercent = true, this.isSymbol = true});
+      {this.decimalRange = 2,
+      this.isFullPercent = true,
+      this.isSymbol = true,
+      this.price});
 
   final int decimalRange;
   final bool isSymbol;
   final bool isFullPercent;
+  final double? price;
 
   @override
   TextEditingValue formatEditUpdate(
@@ -220,6 +232,10 @@ class PercentageNumbersFormatter extends TextInputFormatter {
       }
     } else if (nValue.length >= 3) {
       nValue = percentText;
+    }
+
+    if (price != null && price == 0.0) {
+      nValue = '0';
     }
 
     final symbolText = !isSymbol ? nValue : '$nValue%';
