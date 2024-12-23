@@ -165,7 +165,7 @@ class _DropdownFieldState<T extends BaseObject>
                       itemHeight: 48,
                       hint: Text(
                         widget.placeholder,
-                        textScaleFactor: 1,
+                        textScaler: TextScaler.linear(1),
                         style: _hintTextStyle,
                       ),
                       style: _bodyTextStyle,
