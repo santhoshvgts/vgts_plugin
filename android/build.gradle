@@ -5,7 +5,7 @@ buildscript {
     ext.kotlin_version = '1.9.0'
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 
     dependencies {
@@ -17,7 +17,7 @@ buildscript {
 rootProject.allprojects {
     repositories {
         google()
-        jcenter()
+        mavenCentral()
     }
 }
 
@@ -28,7 +28,7 @@ android {
     
     namespace 'vgts.plugin.vgts_plugin'
 
-    compileSdkVersion 33
+    compileSdkVersion 34
 
      compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
@@ -45,8 +45,4 @@ android {
     defaultConfig {
         minSdkVersion 21
     }
-}
-
-dependencies {
-    implementation "org.jetbrains.kotlin:kotlin-stdlib-jdk7:$kotlin_version"
 }
