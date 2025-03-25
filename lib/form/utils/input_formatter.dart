@@ -164,7 +164,11 @@ class AmountInputFormatter extends TextInputFormatter {
         oldValue.text.replaceAll(",", "").replaceAll('₹', "").trim();
     final splitValue = nValue.split('.');
     if (nValue.startsWith('.')) {
-      nValue = splitValue.last.isNotEmpty ? '.${splitValue.last}' : '0.';
+      nValue = splitValue.last.isNotEmpty
+          ? splitValue.last.length > decimalRange
+              ? oldText
+              : '.${splitValue.last}'
+          : '0.';
     } else if (nValue.contains('.')) {
       if (nValue.substring(nValue.indexOf('.') + 1).length > decimalRange) {
         nValue = oldText;
