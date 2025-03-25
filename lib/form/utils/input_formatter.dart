@@ -177,7 +177,8 @@ class AmountInputFormatter extends TextInputFormatter {
           nValue = '${splitValue[0]}.${splitValue[1]}';
         }
       }
-    } else if (maxDigits != null && splitValue.first.length > maxDigits!) {
+    }
+    if (maxDigits != null && splitValue.first.length > maxDigits!) {
       nValue = oldText;
     }
 
