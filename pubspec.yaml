@@ -1,6 +1,6 @@
 name: vgts_plugin
 description: Resources for Development
-version: 0.0.2+1
+version: 0.0.3+2
 
 environment:
   sdk: ">=3.5.1 <4.0.0"
@@ -12,20 +12,20 @@ dependencies:
 
   #state_management
   get_it: ^8.0.3
-  provider: ^6.1.2
+  provider: ^6.1.5
 
   #image
   image: ^4.5.2
   path_provider: ^2.1.5
   
   #file
-  file_picker: ^8.1.6
+  file_picker: ^10.1.2
   image_picker: ^1.1.2
-  image_cropper: ^8.1.0
-  flutter_image_compress: ^2.3.0
+  image_cropper: ^9.1.0
+  flutter_image_compress: ^2.4.0
 
   #services
-  intl: ^0.20.1
+  intl: ^0.20.2
   equatable: ^2.0.7
 
 dev_dependencies:
