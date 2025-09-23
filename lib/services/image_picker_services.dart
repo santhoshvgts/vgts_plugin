@@ -22,13 +22,16 @@ class ImagePickerService {
       bool isMultiPicker = false,
       bool isWaterMater = true,
       bool isFrontCamera = false,
-      ImageSource? source,
+      String? source,
       String? waterMarkText}) async {
     try {
       ImageSource? imageSource;
 
-      imageSource = source ??
-          await showCupertinoModalPopup(
+      imageSource = source != null
+          ? source == 'camera'
+              ? ImageSource.camera
+              : ImageSource.gallery
+          : await showCupertinoModalPopup(
               context: context,
               builder: (context) {
                 return ChooseImageWidget();
