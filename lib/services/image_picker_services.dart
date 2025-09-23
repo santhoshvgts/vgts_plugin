@@ -21,20 +21,26 @@ class ImagePickerService {
       bool isCompressed = true,
       bool isMultiPicker = false,
       bool isWaterMater = true,
+      bool isFrontCamera = false,
+      ImageSource? source,
       String? waterMarkText}) async {
     try {
       ImageSource? imageSource;
 
-      imageSource = await showCupertinoModalPopup(
-          context: context,
-          builder: (context) {
-            return ChooseImageWidget();
-          });
+      imageSource = source ??
+          await showCupertinoModalPopup(
+              context: context,
+              builder: (context) {
+                return ChooseImageWidget();
+              });
 
       if (imageSource == null) return [];
 
-      List<XFile?> selectedFile = await _pickImage(
-          {'isMultiPicker': isMultiPicker, 'imageSource': imageSource});
+      List<XFile?> selectedFile = await _pickImage({
+        'isMultiPicker': isMultiPicker,
+        'imageSource': imageSource,
+        'position': isFrontCamera ? CameraDevice.front : CameraDevice.rear
+      });
 
       if (selectedFile.isEmpty ||
           selectedFile.where((n) => n == null).isNotEmpty) {
@@ -79,8 +85,14 @@ class ImagePickerService {
   Future<List<XFile?>> _pickImage(Map params) async {
     bool isMultiPicker = params['isMultiPicker'];
     ImageSource? imageSource = params['imageSource'];
+    CameraDevice position = params['position'];
     if (isMultiPicker) return (await _picker.pickMultiImage(imageQuality: 50));
-    return [await _picker.pickImage(source: imageSource!, imageQuality: 50)];
+    return [
+      await _picker.pickImage(
+          source: imageSource!,
+          imageQuality: 50,
+          preferredCameraDevice: position)
+    ];
   }
 
   Future<File> convertPngToJpg(String path) async {
