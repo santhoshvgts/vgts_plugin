@@ -21,7 +21,6 @@ class ImagePickerService {
       bool isCompressed = true,
       bool isMultiPicker = false,
       bool isWaterMater = true,
-      bool isFrontCamera = false,
       String? source,
       String? waterMarkText}) async {
     try {
@@ -42,7 +41,6 @@ class ImagePickerService {
       List<XFile?> selectedFile = await _pickImage({
         'isMultiPicker': isMultiPicker,
         'imageSource': imageSource,
-        'position': isFrontCamera ? CameraDevice.front : CameraDevice.rear
       });
 
       if (selectedFile.isEmpty ||
@@ -88,14 +86,8 @@ class ImagePickerService {
   Future<List<XFile?>> _pickImage(Map params) async {
     bool isMultiPicker = params['isMultiPicker'];
     ImageSource? imageSource = params['imageSource'];
-    CameraDevice position = params['position'];
     if (isMultiPicker) return (await _picker.pickMultiImage(imageQuality: 50));
-    return [
-      await _picker.pickImage(
-          source: imageSource!,
-          imageQuality: 50,
-          preferredCameraDevice: position)
-    ];
+    return [await _picker.pickImage(source: imageSource!, imageQuality: 50)];
   }
 
   Future<File> convertPngToJpg(String path) async {
