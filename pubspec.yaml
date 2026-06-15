@@ -20,7 +20,7 @@ dependencies:
   
   #file
   file_picker: ^10.3.3
-  image_picker: ^1.2.0
+  image_picker: ^1.1.2
   image_cropper: ^10.0.0+1
   flutter_image_compress: ^2.4.0
 
