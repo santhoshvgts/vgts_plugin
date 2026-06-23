@@ -12,7 +12,7 @@ class PdfPickerServices {
       bool allowMultiple = false,
       FileType type = FileType.custom}) async {
     try {
-      FilePickerResult? res = await FilePicker.platform.pickFiles(
+      FilePickerResult? res = await FilePicker.pickFiles(
           dialogTitle: dialogTitle,
           type: type,
           allowMultiple: allowMultiple,
@@ -20,10 +20,12 @@ class PdfPickerServices {
       if (res?.files.isNotEmpty == true) {
         List<File> files = [];
         for (final path in res!.paths) {
-          if (path!.contains('.jpg') || path.contains('.png')) {
+          if (path == null) continue;
+          final ext = path.split('.').last.toLowerCase();
+          if (ext == 'jpg' || ext == 'png') {
             final waterMarkImages = await ImagePickerService().addWaterMarks(
                 files: [File(path)], waterMarkText: waterMarkText);
-            if (waterMarkImages != null) files.add(waterMarkImages.first);
+            if (waterMarkImages?.isNotEmpty == true) files.add(waterMarkImages!.first);
           } else {
             files.add(File(path));
           }

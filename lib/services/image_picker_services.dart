@@ -1,4 +1,6 @@
 import 'dart:io';
+import 'dart:isolate';
+import 'dart:math';
 
 import 'package:intl/intl.dart';
 import 'package:flutter/material.dart';
@@ -7,6 +9,7 @@ import 'package:flutter/cupertino.dart';
 import 'package:image/image.dart' as img;
 import 'package:image_picker/image_picker.dart';
 import 'package:image_cropper/image_cropper.dart';
+import 'package:path_provider/path_provider.dart';
 import 'package:flutter_image_compress/flutter_image_compress.dart';
 
 import 'add_text_watermark.dart';
@@ -51,32 +54,41 @@ class ImagePickerService {
       showLoadingIndicator(context);
 
       final imagesList = selectedFile.map((e) => File(e!.path)).toList();
+      final tempDir = await getTemporaryDirectory();
+      final waterText = waterMarkText ??
+          DateFormat('dd/MM/yyyy h:mm a').format(DateTime.now());
 
-      List<File> waterMarkFiles = [];
-      if (isWaterMater && imagesList.isNotEmpty) {
-        for (final e in imagesList) {
-          final formatter = DateFormat('dd/MM/yyyy h:mm a');
-          final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
-              text: waterMarkText ?? '${formatter.format(DateTime.now())}');
-          waterMarkFiles.add(waterMarkFile!);
+      final files = await Future.wait(imagesList.map((image) async {
+        File current = image;
+
+        if (isWaterMater) {
+          final inputPath = image.path;
+          final outputPath =
+              '${tempDir.path}/${Random().nextInt(1000000)}.jpg';
+          current = await Isolate.run(
+              () => AddTextWaterMark.processSync(inputPath, outputPath, waterText));
         }
-      }
 
-      List<File> files = [];
-
-      if (isCompressed) {
-        final images = waterMarkFiles.isNotEmpty ? waterMarkFiles : imagesList;
-        for (final e in images) {
-          final path = e.path;
-          final convertImage =
-              path.contains('.png') ? await convertPngToJpg(path) : e;
-          final compressed = await _compressImage(convertImage);
-          if (compressed != null) files.add(File(compressed.path));
+        if (isCompressed) {
+          if (current.path.endsWith('.png')) {
+            final inputPath = current.path;
+            final outputPath = inputPath.replaceAll('.png', '.jpg');
+            current = await Isolate.run(() {
+              final decoded =
+                  img.decodeImage(File(inputPath).readAsBytesSync())!;
+              File(outputPath)
+                  .writeAsBytesSync(img.encodeJpg(decoded, quality: 50));
+              return File(outputPath);
+            });
+          }
+          final compressed = await _compressImage(current);
+          if (compressed != null) current = File(compressed.path);
         }
-      }
+
+        return current;
+      }));
 
       Navigator.pop(context);
-      if (files.isEmpty) return waterMarkFiles;
       return files;
     } catch (e) {
       return null;
@@ -88,15 +100,6 @@ class ImagePickerService {
     ImageSource? imageSource = params['imageSource'];
     if (isMultiPicker) return (await _picker.pickMultiImage(imageQuality: 50));
     return [await _picker.pickImage(source: imageSource!, imageQuality: 50)];
-  }
-
-  Future<File> convertPngToJpg(String path) async {
-    final jpgPath = '${path.replaceAll('.png', '.jpg')}';
-    final image = img.decodeImage(File(path).readAsBytesSync());
-    final jpgImage = img.encodeJpg(image!, quality: 50);
-    final file = await File(jpgPath).writeAsBytes(jpgImage);
-    debugPrint('jpg file path ${file.path}');
-    return file;
   }
 
   Future<XFile?> _compressImage(File? image) async {
@@ -121,17 +124,16 @@ class ImagePickerService {
       {List<File>? files,
       bool isWaterMater = true,
       String? waterMarkText}) async {
-    List<File> waterMarkFiles = [];
-    if (isWaterMater && files?.isNotEmpty == true) {
-      for (final e in files!) {
-        final formatter = DateFormat('dd/MM/yyyy h:mm a');
-        final waterMarkFile = await AddTextWaterMark.addTextWaterMark(e,
-            text: waterMarkText ?? '${formatter.format(DateTime.now())}');
-        waterMarkFiles.add(waterMarkFile!);
-      }
-      files = waterMarkFiles;
-    }
-    return files;
+    if (!isWaterMater || files?.isNotEmpty != true) return files;
+    final tempDir = await getTemporaryDirectory();
+    final text = waterMarkText ??
+        DateFormat('dd/MM/yyyy h:mm a').format(DateTime.now());
+    return Future.wait(files!.map((e) async {
+      final inputPath = e.path;
+      final outputPath = '${tempDir.path}/${Random().nextInt(1000000)}.jpg';
+      return Isolate.run(
+          () => AddTextWaterMark.processSync(inputPath, outputPath, text));
+    }));
   }
 
   Future<File?> imageCropper(File? selectedFile) async {

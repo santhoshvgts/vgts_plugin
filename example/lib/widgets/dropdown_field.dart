@@ -173,16 +173,28 @@ class _DropdownFieldState<T extends BaseObject>
                       focusNode: widget.controller.focusNode,
                       underline: Container(),
                       selectedItemBuilder: (context) {
-                        if (widget.controller.value == null)
-                          return [Container()];
+                        final itemCount = dropdownMenuItemWidget.length +
+                            (widget.withAdd && emptyObject != null ? 1 : 0);
+
+                        if (widget.controller.value == null) {
+                          return List.filled(itemCount, Container());
+                        }
 
                         Map data = widget.controller.value!.toDatabaseMap();
 
                         if (data[widget.controller.keyId] == -1) {
-                          return [Container()];
+                          return List.filled(itemCount, Container());
                         }
 
-                        return List<Widget>.from(dropdownMenuItemWidget);
+                        return List.filled(
+                          itemCount,
+                          Text(
+                            data[widget.controller.valueId].toString(),
+                            style: _bodyTextStyle,
+                            overflow: TextOverflow.ellipsis,
+                            textScaler: TextScaler.linear(1),
+                          ),
+                        );
                       },
                       onChanged: (T? value) {
                         if (value == null) return;
